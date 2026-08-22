@@ -1,0 +1,42 @@
+import { readFile, writeFile } from 'node:fs/promises';
+
+const bundlePath = 'public/assets/js/site.min.js';
+let bundle = await readFile(bundlePath, 'utf8');
+
+if (!bundle.includes('function ProductionLegalPage(')) {
+  const marker = 'var Ts=s({default:()=>Es}),Es=[';
+  const insertion = String.raw`function ProductionLegalPage({title:e,intro:t,sections:n}){return(0,k.useEffect)(()=>{document.title=\`${'${e}'} | Forland & Company Advocates\`},[e]),(0,A.jsxs)(\`main\`,{className:\`min-h-screen bg-background-50 pt-28 pb-20\`,children:[(0,A.jsx)(\`section\`,{className:\`px-4 md:px-8\`,children:(0,A.jsxs)(\`div\`,{className:\`mx-auto max-w-4xl\`,children:[(0,A.jsx)(\`p\`,{className:\`text-xs font-semibold tracking-[0.3em] uppercase text-accent-600\`,children:\`Legal\`}),(0,A.jsx)(\`h1\`,{className:\`mt-4 font-heading text-3xl md:text-5xl font-semibold text-primary-800\`,children:e}),(0,A.jsx)(\`p\`,{className:\`mt-5 max-w-3xl text-sm md:text-base leading-relaxed text-foreground-500\`,children:t}),(0,A.jsx)(\`p\`,{className:\`mt-3 text-xs text-foreground-400\`,children:\`Last updated: 22 August 2026\`}),(0,A.jsx)(\`div\`,{className:\`mt-12 space-y-10\`,children:n.map(e=>(0,A.jsxs)(\`section\`,{children:[(0,A.jsx)(\`h2\`,{className:\`font-heading text-xl md:text-2xl font-semibold text-primary-800\`,children:e.title}),(0,A.jsx)(\`p\`,{className:\`mt-3 text-sm md:text-base leading-7 text-foreground-500\`,children:e.body})]},e.title))}),(0,A.jsx)(\`div\`,{className:\`mt-12\`,children:(0,A.jsx)(Ao,{to:\`/contact\`,className:\`inline-flex rounded-md bg-primary-500 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-600\`,children:\`CONTACT THE FIRM\`})})]})})]})}function PrivacyPage(){return(0,A.jsx)(ProductionLegalPage,{title:\`Privacy Policy\`,intro:\`This policy explains how Forland & Company Advocates handles personal information submitted through this website.\`,sections:[{title:\`Information we collect\`,body:\`We may collect contact details, organisation details and the information you choose to include in an inquiry. Please do not submit highly sensitive or confidential information before an advocate-client relationship has been established.\`},{title:\`How information is used\`,body:\`Information is used to respond to inquiries, assess whether the firm can assist, manage professional relationships, maintain website security and meet legal or regulatory obligations.\`},{title:\`Legal and professional obligations\`,body:\`Information may be retained or disclosed where required by Kenyan law, professional duties, conflict checks, court orders or regulatory requirements. Submitting an inquiry does not by itself create an advocate-client relationship.\`},{title:\`Service providers and international processing\`,body:\`Website hosting and form-processing providers may process limited information on the firm’s behalf. Appropriate safeguards should be configured with the selected hosting provider before launch.\`},{title:\`Your choices\`,body:\`You may request access to, correction of or deletion of eligible personal information by contacting the firm through the inquiry page. Some information may be retained where law or professional obligations require it.\`},{title:\`Security and updates\`,body:\`Reasonable technical and organisational safeguards are used, but no internet transmission is completely secure. This policy may be updated as the website, services or legal requirements change.\`}]})}function TermsPage(){return(0,A.jsx)(ProductionLegalPage,{title:\`Terms of Use\`,intro:\`These terms govern use of the Forland & Company Advocates website. By using the site, you agree to these terms.\`,sections:[{title:\`General information only\`,body:\`Website content is provided for general information and does not constitute legal advice. You should obtain advice tailored to your circumstances before acting or refraining from acting.\`},{title:\`No advocate-client relationship\`,body:\`Viewing this site or sending an inquiry does not create an advocate-client relationship. A relationship arises only after the firm confirms engagement in writing and completes any required conflict and onboarding checks.\`},{title:\`Confidentiality of inquiries\`,body:\`Do not send confidential, privileged or time-sensitive information through the website before an engagement is confirmed. Unsolicited information may not be treated as confidential.\`},{title:\`Accuracy and availability\`,body:\`The firm aims to keep information accurate and the site available but does not guarantee completeness, timeliness or uninterrupted access. Practice descriptions and insights may change without notice.\`},{title:\`Intellectual property\`,body:\`Unless otherwise stated, website text, branding and design are owned by or licensed to the firm. Content may not be reproduced for commercial purposes without written permission.\`},{title:\`External services and liability\`,body:\`Third-party hosting, fonts, media or links are governed by their own terms. To the extent permitted by law, the firm is not liable for loss arising solely from reliance on general website content or temporary site unavailability.\`},{title:\`Governing law\`,body:\`These terms are governed by the laws of Kenya. Questions about these terms may be submitted through the contact page.\`}]})}`.replaceAll('\\`', '`');
+
+  if (!bundle.includes(marker)) throw new Error('Could not find the application route marker.');
+  bundle = bundle.replace(marker, insertion + marker);
+  bundle = bundle.replace(
+    '{path:`/contact`,element:(0,A.jsx)(ws,{})},{path:`*`',
+    '{path:`/contact`,element:(0,A.jsx)(ws,{})},{path:`/privacy-policy`,element:(0,A.jsx)(PrivacyPage,{})},{path:`/terms-of-use`,element:(0,A.jsx)(TermsPage,{})},{path:`*`',
+  );
+}
+
+const productionPagesStart = bundle.indexOf('function ProductionLegalPage(');
+const productionPagesEnd = bundle.indexOf('var Ts=s({default:()=>Es}),Es=[', productionPagesStart);
+if (productionPagesStart >= 0 && productionPagesEnd > productionPagesStart) {
+  const pages = bundle.slice(productionPagesStart, productionPagesEnd).replaceAll('\\`', '`');
+  bundle = bundle.slice(0, productionPagesStart) + pages + bundle.slice(productionPagesEnd);
+}
+
+const notFoundStart = bundle.lastIndexOf('function Bo(){let e=wa();return');
+const notFoundEnd = bundle.indexOf('var Vo=', notFoundStart);
+if (notFoundStart < 0 || notFoundEnd < 0) throw new Error('Could not find the 404 component.');
+
+const production404 = String.raw`function Bo(){let e=wa();return(0,k.useEffect)(()=>{document.title=\`Page Not Found | Forland & Company Advocates\`},[]),(0,A.jsx)(\`main\`,{className:\`min-h-screen bg-background-50 px-4 pt-32 pb-20\`,children:(0,A.jsxs)(\`div\`,{className:\`mx-auto max-w-3xl text-center\`,children:[(0,A.jsx)(\`p\`,{className:\`font-heading text-8xl md:text-9xl font-semibold text-accent-500\`,children:\`404\`}),(0,A.jsx)(\`h1\`,{className:\`mt-5 font-heading text-3xl md:text-5xl font-semibold text-primary-800\`,children:\`Page not found\`}),(0,A.jsxs)(\`p\`,{className:\`mx-auto mt-4 max-w-xl text-sm md:text-base leading-relaxed text-foreground-500\`,children:[\`The page at \`,(0,A.jsx)(\`span\`,{className:\`font-mono text-primary-600\`,children:e.pathname}),\` does not exist or may have moved.\`]}),(0,A.jsxs)(\`div\`,{className:\`mt-8 flex flex-col sm:flex-row justify-center gap-3\`,children:[(0,A.jsx)(Ao,{to:\`/\`,className:\`rounded-md bg-primary-500 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-600\`,children:\`RETURN HOME\`}),(0,A.jsx)(Ao,{to:\`/contact\`,className:\`rounded-md border border-primary-500/30 px-6 py-3 text-sm font-semibold text-primary-700 hover:bg-primary-50\`,children:\`CONTACT THE FIRM\`})]})]})})}`.replaceAll('\\`', '`');
+bundle = bundle.slice(0, notFoundStart) + production404 + bundle.slice(notFoundEnd);
+
+bundle = bundle
+  .replaceAll('[OFFICE ADDRESS]', 'Office details provided when appointments are confirmed')
+  .replaceAll('[PHONE NUMBER]', 'Available on request')
+  .replaceAll('[EMAIL ADDRESS]', 'Use the secure inquiry form')
+  .replaceAll('[OFFICE HOURS]', 'Monday–Friday, by appointment')
+  .replace('a.forEach((e,t)=>{t===`website_alt`', 'o.append(`form-name`,`contact`),a.forEach((e,t)=>{t===`website_alt`')
+  .replace('e.ok&&a?.code===`OK`?', 'e.ok?')
+  .replace('var xs=`/api/contact`', 'var xs=`/`');
+
+await writeFile(bundlePath, bundle);
+console.log('Production pages and contact behavior added.');

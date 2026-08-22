@@ -1,0 +1,9 @@
+{
+  "name": "Forland & Company Advocates",
+  "short_name": "Forland Advocates",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#0b172a",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

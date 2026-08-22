@@ -1,0 +1,166 @@
+/* Keep the native cursor available if the compiled custom-cursor effect activates. */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* The exported custom cursor is not needed and can appear as a large dot in
+   browser mobile emulation. Always use the native pointer instead. */
+.cursor-dot,
+.cursor-ring,
+.cursor-label {
+  display: none !important;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+header nav a[aria-label='Forland & Company Advocates home'] > span:first-child {
+  font-size: 1.2rem;
+}
+
+header nav a[aria-label='Forland & Company Advocates home'] > span:last-child {
+  font-size: 0.55rem;
+}
+
+@media (min-width: 1024px) {
+  header nav .hidden.lg\:flex a,
+  header nav .hidden.lg\:flex button {
+    font-size: 0.75rem;
+  }
+}
+
+/* Restore opacity utilities omitted from the downloaded compiled stylesheet. */
+.bg-primary-900\/88 {
+  background-color: rgb(3 8 18 / 88%);
+}
+
+.hover\:bg-primary-800\/70:hover {
+  background-color: rgb(8 17 32 / 70%);
+}
+
+@media (max-width: 767px) {
+  header nav a[aria-label='Forland & Company Advocates home'] {
+    min-height: 44px;
+  }
+
+  header nav button[aria-label='Toggle menu'] {
+    width: 44px;
+    height: 44px;
+  }
+
+  header nav + div a,
+  header nav + div button {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+  }
+
+  .magnetic-wrap {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .magnetic-wrap > a,
+  .magnetic-wrap > button {
+    width: 100%;
+    min-height: 48px;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  main a[href^='#'] {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    white-space: normal;
+    line-height: 1.25;
+  }
+
+  footer a {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  form input,
+  form select,
+  form textarea {
+    min-height: 48px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1023px) {
+  header {
+    overflow: visible;
+  }
+
+  /* Keep the mobile drawer in the viewport. The original translated panel
+     could be clipped by the page's horizontal-overflow protection. */
+  header > nav + div {
+    position: fixed !important;
+    inset: 5rem 0 0 !important;
+    z-index: 60 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: calc(100dvh - 5rem) !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  header > nav + div.translate-x-full {
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(100%) !important;
+  }
+
+  header > nav + div.translate-x-0 {
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0) !important;
+  }
+}
+
+@media (max-width: 479px) {
+  #industries .grid.grid-cols-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.custom-cursor-active {
+    cursor: auto;
+  }
+
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role='button'] {
+    cursor: pointer;
+  }
+
+}
