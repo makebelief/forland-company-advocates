@@ -1,7 +1,9 @@
 (() => {
   function updateLogo() {
     document
-      .querySelectorAll("header a[aria-label*='home'], footer a[href='/']")
+      .querySelectorAll(
+        "header a[aria-label*='home'], footer .lg\\:col-span-1 > a[href='/']",
+      )
       .forEach((link) => {
         if (link.querySelector(".official-site-logo")) return;
         const logo = document.createElement("span");
