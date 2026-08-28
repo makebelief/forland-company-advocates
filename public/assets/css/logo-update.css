@@ -9,6 +9,7 @@
 header .official-site-logo {
   width: min(310px, 62vw);
   height: auto;
+  transform: translateY(-4px);
 }
 
 footer .official-site-logo {
