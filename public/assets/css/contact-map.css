@@ -1,0 +1,78 @@
+.contact-map-section {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid #e5e2dc;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 12px 35px -28px rgba(11, 23, 42, 0.45);
+}
+
+.contact-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.contact-map-eyebrow {
+  margin: 0;
+  color: #a77b31;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.contact-map-title {
+  margin: 0.25rem 0 0;
+  color: #14233b;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 600;
+}
+
+.contact-map-address {
+  margin: 0.2rem 0 0;
+  color: #657083;
+  font-size: 0.875rem;
+}
+
+.contact-map-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  background: #18385f;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 180ms ease;
+}
+
+.contact-map-link:hover,
+.contact-map-link:focus-visible {
+  background: #244d7d;
+}
+
+.contact-map-frame {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .contact-map-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .contact-map-frame {
+    height: 340px;
+  }
+}
