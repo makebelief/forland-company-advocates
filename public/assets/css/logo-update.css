@@ -12,6 +12,10 @@ header .official-site-logo {
   transform: translateY(-4px);
 }
 
+header a.bg-accent-500 {
+  color: #fff;
+}
+
 footer .official-site-logo {
   width: min(270px, 100%);
   height: auto;
