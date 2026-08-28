@@ -12,9 +12,8 @@ header .official-site-logo {
 footer .official-site-logo {
   width: min(270px, 100%);
   height: auto;
-  padding: 0.35rem;
-  border-radius: 0.25rem;
-  background: #fff;
+  filter: grayscale(1) brightness(2.2) contrast(0.8);
+  opacity: 0.95;
 }
 
 @media (max-width: 480px) {
