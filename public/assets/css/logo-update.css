@@ -1,0 +1,25 @@
+.official-site-logo {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+header .official-site-logo {
+  max-width: min(265px, 58vw);
+  height: 58px;
+}
+
+footer .official-site-logo {
+  width: min(270px, 100%);
+  height: auto;
+  padding: 0.35rem;
+  border-radius: 0.25rem;
+  background: #fff;
+}
+
+@media (max-width: 480px) {
+  header .official-site-logo {
+    max-width: 215px;
+    height: 52px;
+  }
+}
