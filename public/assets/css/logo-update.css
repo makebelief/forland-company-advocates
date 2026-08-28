@@ -1,24 +1,25 @@
 .official-site-logo {
   display: block;
-  width: auto;
-  object-fit: contain;
+  aspect-ratio: 3 / 1;
+  background-color: #0b172a;
+  -webkit-mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
+  mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
 }
 
 header .official-site-logo {
-  max-width: min(265px, 58vw);
+  width: min(265px, 58vw);
   height: 58px;
 }
 
 footer .official-site-logo {
   width: min(270px, 100%);
-  height: auto;
-  filter: grayscale(1) brightness(2.2) contrast(0.8);
-  opacity: 0.95;
+  height: 90px;
+  background-color: #b89a5c;
 }
 
 @media (max-width: 480px) {
   header .official-site-logo {
-    max-width: 215px;
+    width: 215px;
     height: 52px;
   }
 }
