@@ -1,4 +1,5 @@
 import { access, readFile } from 'node:fs/promises';
+import { pages, site } from './seo-pages.mjs';
 
 const requiredFiles = [
   'index.html',
@@ -42,6 +43,20 @@ for (const marker of requiredMarkers) {
 }
 for (const marker of forbiddenProductionMarkers) {
   if (bundle.includes(marker)) throw new Error(`Application bundle contains production blocker: ${marker}`);
+}
+
+const sitemap = await readFile('public/sitemap.xml', 'utf8');
+for (const path of Object.keys(pages)) {
+  const url = site.origin + (path === '/' ? '/' : path);
+  if (!sitemap.includes(`<loc>${url}</loc>`)) throw new Error(`Sitemap is missing: ${url}`);
+}
+if ((sitemap.match(/<url>/g) || []).length !== Object.keys(pages).length) {
+  throw new Error('Sitemap URL count does not match the SEO route registry.');
+}
+
+for (const [path, page] of Object.entries(pages)) {
+  if (page.title.length < 30 || page.title.length > 70) throw new Error(`SEO title length is unsuitable for ${path}: ${page.title.length}`);
+  if (page.description.length < 110 || page.description.length > 170) throw new Error(`Meta description length is unsuitable for ${path}: ${page.description.length}`);
 }
 
 console.log('Project structure and branding checks passed.');

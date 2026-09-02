@@ -1,63 +1,33 @@
 (() => {
-  const pages = {
-    '/': {
-      title: 'Forland & Company Advocates | Commercial Law Firm Nairobi Kenya',
-      description: 'Practical corporate, commercial and investment legal solutions for businesses, investors and entrepreneurs in Kenya.',
-    },
-    '/about': {
-      title: 'About | Forland & Company Advocates',
-      description: 'Learn about Forland & Company Advocates and our practical, commercially focused approach to legal services in Kenya.',
-    },
-    '/practice-areas': {
-      title: 'Practice Areas | Forland & Company Advocates',
-      description: 'Explore corporate, commercial, dispute resolution, property, employment, finance, immigration and energy legal services.',
-    },
-    '/insights': {
-      title: 'Legal Insights | Forland & Company Advocates',
-      description: 'Practical legal and commercial perspectives for businesses, investors and entrepreneurs operating in Kenya.',
-    },
-    '/our-team': {
-      title: 'Our Team | Forland & Company Advocates',
-      description: 'Meet the team providing practical, strategic and client-focused legal counsel at Forland & Company Advocates.',
-    },
-    '/contact': {
-      title: 'Contact | Forland & Company Advocates',
-      description: 'Send a secure inquiry to Forland & Company Advocates in Nairobi, Kenya.',
-    },
-    '/privacy-policy': {
-      title: 'Privacy Policy | Forland & Company Advocates',
-      description: 'How Forland & Company Advocates handles information submitted through this website.',
-    },
-    '/terms-of-use': {
-      title: 'Terms of Use | Forland & Company Advocates',
-      description: 'Terms governing the use of the Forland & Company Advocates website.',
-    },
+  const data = {"pages":{"/":{"title":"Corporate & Commercial Lawyers in Nairobi | Forland Advocates","description":"Nairobi law firm advising businesses, investors and individuals on corporate, commercial, property, disputes, employment, finance and investment law in Kenya.","type":"website"},"/about":{"title":"About Our Nairobi Law Firm | Forland Advocates","description":"Meet Forland & Company Advocates, a Nairobi law firm providing strategic, commercially focused legal counsel to businesses, investors and individuals in Kenya.","type":"website"},"/practice-areas":{"title":"Legal Services & Practice Areas in Kenya | Forland Advocates","description":"Explore our legal services in corporate law, litigation, property, employment, banking, technology, immigration, succession, construction and clean energy.","type":"website"},"/practice-areas/corporate-commercial":{"title":"Corporate & Commercial Lawyers Kenya | Forland Advocates","description":"Corporate and commercial lawyers in Nairobi advising on company formation, contracts, governance, transactions, restructuring, due diligence and compliance in Kenya.","type":"website"},"/practice-areas/litigation-dispute":{"title":"Litigation & Dispute Resolution Lawyers Kenya | Forland Advocates","description":"Strategic representation in Kenyan commercial, contractual, property, employment and shareholder disputes, including negotiation, mediation, arbitration and litigation.","type":"website"},"/practice-areas/real-estate":{"title":"Real Estate & Conveyancing Lawyers Kenya | Forland Advocates","description":"Nairobi property lawyers handling conveyancing, land due diligence, sales, purchases, leases, developments, securities and real estate disputes across Kenya.","type":"website"},"/practice-areas/employment-labour":{"title":"Employment & Labour Lawyers Kenya | Forland Advocates","description":"Employment lawyers advising Kenyan employers and employees on contracts, policies, compliance, discipline, termination, redundancy and workplace disputes.","type":"website"},"/practice-areas/banking-finance":{"title":"Banking & Finance Lawyers Kenya | Forland Advocates","description":"Legal advice for lenders, borrowers and investors on loans, securities, mortgages, guarantees, restructuring, enforcement and financing transactions in Kenya.","type":"website"},"/practice-areas/technology-data-ip":{"title":"Technology, Data Protection & IP Lawyers Kenya | Forland Advocates","description":"Kenyan legal counsel for technology contracts, data protection compliance, privacy, software licensing, trademarks, copyright and digital businesses.","type":"website"},"/practice-areas/immigration-mobility":{"title":"Immigration & Business Mobility Lawyers Kenya | Forland Advocates","description":"Kenya immigration legal services for work permits, passes, investor immigration, foreign employees, residency matters and corporate immigration compliance.","type":"website"},"/practice-areas/estate-planning":{"title":"Succession & Estate Planning Lawyers Kenya | Forland Advocates","description":"Legal advice on wills, trusts, probate, letters of administration, succession planning, estate distribution and family property matters in Kenya.","type":"website"},"/practice-areas/construction-projects":{"title":"Construction & Infrastructure Lawyers Kenya | Forland Advocates","description":"Legal support for Kenyan construction and infrastructure projects, including contracts, procurement, financing, due diligence, claims and dispute resolution.","type":"website"},"/practice-areas/energy-emobility":{"title":"Clean Energy & E-Mobility Lawyers Kenya | Forland Advocates","description":"Legal counsel for electric mobility, charging infrastructure, battery swapping, clean energy investment, sustainable transport and related regulation in Kenya.","type":"website"},"/insights":{"title":"Kenya Legal Insights for Business | Forland Advocates","description":"Practical Kenyan legal insights on business formation, commercial contracts, governance, property, employment compliance and electric mobility.","type":"website"},"/insights/establishing-business":{"title":"Establishing a Business in Kenya: Legal Guide | Forland Advocates","description":"A practical legal guide to choosing a structure, registering, governing and maintaining regulatory compliance when establishing a business in Kenya.","type":"article"},"/insights/commercial-agreement":{"title":"Commercial Agreements in Kenya: Drafting Guide | Forland Advocates","description":"Key legal issues Kenyan businesses should address when reviewing and negotiating commercial agreements, obligations, risk allocation and dispute clauses.","type":"article"},"/insights/emobility-sector":{"title":"Kenya E-Mobility Sector: Legal Considerations | Forland Advocates","description":"Legal and regulatory considerations for electric vehicles, charging networks, battery swapping, investment and sustainable mobility businesses in Kenya.","type":"article"},"/insights/corporate-governance":{"title":"Corporate Governance in Kenya: Practical Guide | Forland Advocates","description":"A practical guide to governance structures, director duties, decision-making, records and risk management for companies operating in Kenya.","type":"article"},"/insights/property-due-diligence":{"title":"Property Due Diligence in Kenya: Buyer Guide | Forland Advocates","description":"What property buyers and investors should verify before completing a land or real estate transaction in Kenya, from title searches to approvals.","type":"article"},"/insights/employment-compliance":{"title":"Employment Compliance in Kenya: Employer Guide | Forland Advocates","description":"A practical guide for Kenyan employers covering contracts, records, workplace policies, discipline, termination, redundancy and employee data.","type":"article"},"/our-team":{"title":"Our Legal Team | Forland & Company Advocates Nairobi","description":"Meet Asbjorn Ng’ani, Managing Partner and Advocate of the High Court of Kenya, and learn about the client-focused approach of our Nairobi law firm.","type":"website"},"/contact":{"title":"Contact Our Nairobi Lawyers | Forland Advocates","description":"Contact Forland & Company Advocates at Landmark Plaza, Argwings Kodhek Road, Nairobi, for strategic legal advice and representation in Kenya.","type":"website"},"/privacy-policy":{"title":"Privacy Policy | Forland & Company Advocates","description":"Read how Forland & Company Advocates collects, uses, protects and manages personal information submitted through this website.","type":"website"},"/terms-of-use":{"title":"Website Terms of Use | Forland & Company Advocates","description":"Read the terms governing use of the Forland & Company Advocates website, including legal-information, confidentiality and liability notices.","type":"website"}},"site":{"name":"Forland & Company Advocates","shortName":"Forland Advocates","origin":"https://forlandcompanyadvocates.co.ke","email":"forlandcompanyadvocates@gmail.com","telephone":"+254713001575","image":"/assets/media/hero-poster-nairobi.jpg","logo":"/favicon-logo-master.png"}};
+  const upsertMeta = (selector, attributes) => {
+    let node = document.head.querySelector(selector);
+    if (!node) { node = document.createElement('meta'); document.head.append(node); }
+    Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
   };
-
-  let previousPath = '';
-  const updateMetadata = () => {
+  const update = () => {
     const path = window.location.pathname.replace(/\/$/, '') || '/';
-    if (path === previousPath) return;
-    previousPath = path;
-
-    const page = pages[path] ?? {
-      title: 'Page Not Found | Forland & Company Advocates',
-      description: 'The requested page could not be found.',
-    };
+    const page = data.pages[path];
+    if (!page) { upsertMeta('meta[name="robots"]', { name: 'robots', content: 'noindex, follow' }); return; }
+    const url = data.site.origin + (path === '/' ? '/' : path);
+    const image = data.site.origin + data.site.image;
     document.title = page.title;
-
-    const description = document.querySelector('meta[name="description"]');
-    if (description) description.content = page.description;
-
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.href = `https://forlandcompanyadvocates.co.ke${path === '/' ? '/' : path}`;
+    upsertMeta('meta[name="description"]', { name: 'description', content: page.description });
+    upsertMeta('meta[name="robots"]', { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' });
+    upsertMeta('meta[property="og:title"]', { property: 'og:title', content: page.title });
+    upsertMeta('meta[property="og:description"]', { property: 'og:description', content: page.description });
+    upsertMeta('meta[property="og:url"]', { property: 'og:url', content: url });
+    upsertMeta('meta[property="og:type"]', { property: 'og:type', content: page.type });
+    upsertMeta('meta[property="og:image"]', { property: 'og:image', content: image });
+    upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: page.title });
+    upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: page.description });
+    upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: image });
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
+    canonical.href = url;
   };
-
-  updateMetadata();
-  new MutationObserver(updateMetadata).observe(document.getElementById('root'), {
-    childList: true,
-    subtree: true,
-  });
-  window.addEventListener('popstate', updateMetadata);
-  document.addEventListener('click', () => window.setTimeout(updateMetadata, 0), true);
+  update();
+  new MutationObserver(update).observe(document.getElementById('root'), { childList: true, subtree: true });
+  window.addEventListener('popstate', update);
+  document.addEventListener('click', () => window.setTimeout(update, 0), true);
 })();

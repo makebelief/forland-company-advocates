@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://forlandcompanyadvocates.co.ke/sitemap.xml
+Host: forlandcompanyadvocates.co.ke

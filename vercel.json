@@ -1,5 +1,30 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/practice-areas", "destination": "/practice-areas/index.html" },
+    { "source": "/practice-areas/corporate-commercial", "destination": "/practice-areas/corporate-commercial/index.html" },
+    { "source": "/practice-areas/litigation-dispute", "destination": "/practice-areas/litigation-dispute/index.html" },
+    { "source": "/practice-areas/real-estate", "destination": "/practice-areas/real-estate/index.html" },
+    { "source": "/practice-areas/employment-labour", "destination": "/practice-areas/employment-labour/index.html" },
+    { "source": "/practice-areas/banking-finance", "destination": "/practice-areas/banking-finance/index.html" },
+    { "source": "/practice-areas/technology-data-ip", "destination": "/practice-areas/technology-data-ip/index.html" },
+    { "source": "/practice-areas/immigration-mobility", "destination": "/practice-areas/immigration-mobility/index.html" },
+    { "source": "/practice-areas/estate-planning", "destination": "/practice-areas/estate-planning/index.html" },
+    { "source": "/practice-areas/construction-projects", "destination": "/practice-areas/construction-projects/index.html" },
+    { "source": "/practice-areas/energy-emobility", "destination": "/practice-areas/energy-emobility/index.html" },
+    { "source": "/insights", "destination": "/insights/index.html" },
+    { "source": "/insights/establishing-business", "destination": "/insights/establishing-business/index.html" },
+    { "source": "/insights/commercial-agreement", "destination": "/insights/commercial-agreement/index.html" },
+    { "source": "/insights/emobility-sector", "destination": "/insights/emobility-sector/index.html" },
+    { "source": "/insights/corporate-governance", "destination": "/insights/corporate-governance/index.html" },
+    { "source": "/insights/property-due-diligence", "destination": "/insights/property-due-diligence/index.html" },
+    { "source": "/insights/employment-compliance", "destination": "/insights/employment-compliance/index.html" },
+    { "source": "/our-team", "destination": "/our-team/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy/index.html" },
+    { "source": "/terms-of-use", "destination": "/terms-of-use/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
