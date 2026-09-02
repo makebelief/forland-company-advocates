@@ -77,6 +77,19 @@ if (!bundle.includes('id:`technology-data-ip`')) {
 bundle = bundle
   .replace('items:PracticeDetails[`technology-data-ip`].services', 'items:[`Data protection and privacy advisory`,`Data protection compliance reviews and audits`,`Data processing agreements`,`Privacy policies and notices`,`Technology contracts`,`Software licensing`,`Software development agreements`,`Technology procurement agreements`,`Website and platform terms`,`Intellectual property protection`,`Trademark and copyright matters`,`Intellectual property licensing`,`Confidentiality and non-disclosure agreements`,`Technology-related commercial transactions`,`Digital business advisory`,`Technology and data-related disputes`]')
   .replace('items:PracticeDetails[`construction-projects`].services', 'items:[`Construction contracts`,`Contractor and subcontractor agreements`,`Development agreements`,`Project documentation`,`Procurement and commercial contracts`,`Construction due diligence`,`Project-related legal audits`,`Regulatory and contractual compliance`,`Land and property aspects of projects`,`Project financing documentation`,`Contract administration and advisory`,`Claims and dispute management`,`Construction disputes`,`Negotiation and alternative dispute resolution`]');
+bundle = bundle
+  .replace('id:`estate-planning`,number:`06`,name:`Estate Planning & Private Client`', 'id:`estate-planning`,number:`08`,name:`Family, Succession & Estate Planning`')
+  .replace('id:`immigration-mobility`,number:`07`,name:`Immigration & Mobility`', 'id:`immigration-mobility`,number:`07`,name:`Immigration & Business Mobility`')
+  .replace('id:`energy-emobility`,number:`08`,name:`Energy, E-Mobility & Sustainable Transport`', 'id:`energy-emobility`,number:`10`,name:`Electric Mobility, Clean Energy & Sustainable Transport`');
+if (!bundle.includes('PracticeAreaOrder.indexOf')) {
+  bundle = bundle
+    .replace('var Yo=[', 'var PracticeAreaOrder=[`corporate-commercial`,`litigation-dispute`,`real-estate`,`employment-labour`,`banking-finance`,`technology-data-ip`,`immigration-mobility`,`estate-planning`,`construction-projects`,`energy-emobility`],Yo=[')
+    .replace('],Xo={"corporate-commercial"', '].sort((e,t)=>PracticeAreaOrder.indexOf(e.id)-PracticeAreaOrder.indexOf(t.id)),Xo={"corporate-commercial"');
+}
+bundle = bundle
+  .replace('"energy-emobility":`/assets/media/pa-energy.jpg`}', '"energy-emobility":`/assets/media/pa-energy.jpg`,"technology-data-ip":`/assets/media/insight-06.jpg`,"construction-projects":`/assets/media/ind-bg.jpg`}')
+  .replace('top-full pt-5 w-[300px]', 'top-full pt-5 w-[440px] max-w-[calc(100vw-2rem)]')
+  .replace('transition-colors duration-200 whitespace-nowrap`,children:e.name', 'transition-colors duration-200 leading-snug`,children:e.name');
 
 const practiceRoutes = Object.keys({
   'corporate-commercial': 1, 'litigation-dispute': 1, 'real-estate': 1,
