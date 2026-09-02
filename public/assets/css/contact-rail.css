@@ -38,18 +38,18 @@
 .contact-rail-actions {
   overflow: hidden;
   border-radius: 0 0 0 12px;
-  background: #f7941d;
+  background: #c4a15a;
 }
 
 .contact-rail-link {
-  background: #f7941d;
+  background: #c4a15a;
   font-size: 1.35rem;
   transition: background-color 180ms ease;
 }
 
 .contact-rail-link:hover,
 .contact-rail-link:focus-visible {
-  background: #da7810;
+  background: #a98642;
 }
 
 .contact-rail-link:focus-visible,
