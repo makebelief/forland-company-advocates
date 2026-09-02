@@ -103,6 +103,10 @@ bundle = bundle
   .replace('top-full pt-5 w-[300px]', 'top-full pt-5 practice-menu-dropdown')
   .replace('top-full pt-5 w-[440px] max-w-[calc(100vw-2rem)]', 'top-full pt-5 practice-menu-dropdown')
   .replace('transition-colors duration-200 whitespace-nowrap`,children:e.name', 'transition-colors duration-200 leading-snug`,children:e.name');
+bundle = bundle.replace(
+  'text-white/80 max-w-lg mx-auto drop-shadow-md`,style:{animation:`fadeUp 0.8s 0.55s',
+  'text-white/80 max-w-3xl mx-auto drop-shadow-md`,style:{animation:`fadeUp 0.8s 0.55s',
+);
 
 const practiceRoutes = Object.keys({
   'corporate-commercial': 1, 'litigation-dispute': 1, 'real-estate': 1,
