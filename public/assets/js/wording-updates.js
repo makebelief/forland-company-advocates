@@ -83,7 +83,87 @@
     ["Visit our office", "Find Our Office"],
   ]);
 
-  const routeMaps = { "/": home, "/about": about, "/practice-areas": practice, "/insights": insights, "/contact": contact };
+  const routeMaps = { "/": home, "/about": about, "/practice-areas": practice, "/contact": contact };
+
+  // Approved copy from WEBSITEEE (1).docx. Yellow-highlighted Insights
+  // category copy is intentionally excluded.
+  home.set(
+    "A Kenyan law firm delivering practical, timely and client-focused legal solutions to businesses, investors and individuals.",
+    "Forland & Company Advocates is a modern Kenyan law firm providing practical, strategic and client-focused legal solutions to businesses, investors, entrepreneurs and individuals. We advise and represent our clients across a broad range of legal matters, helping them navigate transactions, manage risk, resolve disputes, protect their interests and pursue their commercial and personal objectives."
+  );
+  home.set(
+    "We believe effective legal advice should help clients make better decisions. Whether you are building a business, negotiating an agreement or planning your estate, we provide clear, practical and timely counsel.",
+    "Legal matters rarely exist in isolation. A commercial agreement can affect your business relationships. A property transaction can represent a significant investment. A dispute can interrupt your operations. A regulatory requirement can determine whether a business can enter a market or expand. We therefore take the time to understand the circumstances behind each matter and the outcome our client is seeking. Our approach combines legal analysis, strategic thinking and practical advice to help clients make informed decisions and take appropriate action."
+  );
+  home.set(
+    "Structuring, documenting and guiding the commercial transactions that establish and grow businesses.",
+    "We advise businesses, entrepreneurs, investors and organisations on the legal issues that arise throughout the life of a business, from establishment and structuring to expansion, commercial transactions, regulatory compliance and dispute resolution."
+  );
+  home.set(
+    "Advising the businesses and investors shaping Kenya’s clean energy and electric mobility future.",
+    "We provide legal support to electric vehicle manufacturers and dealers, charging infrastructure developers, battery-swapping operators, fleet operators, transport businesses, technology companies, investors, financiers and clean-energy enterprises."
+  );
+  home.set(
+    "Legal matters involve business objectives, investments, relationships and long-term plans. We understand the full picture.",
+    "We begin by understanding the client, the circumstances and the objective to be achieved. We consider not only the immediate legal issue but also the wider commercial, financial and practical implications."
+  );
+  home.set(
+    "New ideas and technology to meet an evolving world.",
+    "We believe clients should understand their legal position and the options available to them. We strive to provide clear and straightforward advice and practical, legally sound ways forward."
+  );
+  home.set(
+    "The transition toward electric mobility, renewable energy and sustainable transport is creating new business models and regulatory challenges. We advise businesses and investors in this evolving landscape.",
+    "The transition towards electric mobility, clean energy and sustainable transport is creating new opportunities for businesses and investors across Kenya and the wider region. Our legal support extends across corporate structuring, commercial agreements, investment and financing transactions, regulatory matters, property, technology, employment, data protection and dispute resolution."
+  );
+  home.set(
+    "Whether you are building a business, entering a transaction, investing in Kenya or resolving a dispute, we are ready to help.",
+    "Whether you require assistance with a business transaction, legal dispute, investment, property matter, regulatory issue or another legal concern, we invite you to speak with us. Tell us about your matter and we will discuss how we may assist."
+  );
+
+  about.set(
+    "A Kenyan law firm committed to delivering practical, timely and client-focused legal solutions.",
+    "Forland & Company Advocates is a modern Kenyan law firm providing practical, strategic and high-quality legal services to individuals, businesses, investors and organisations."
+  );
+  about.set(
+    "Forland & Company Advocates delivers practical, timely and client-focused legal solutions to businesses, investors, entrepreneurs, institutions and individuals.",
+    "We believe that good legal practice is about more than knowing the law. It requires an understanding of the client, the circumstances in which a legal issue arises and the objectives that need to be achieved. We therefore look beyond the immediate legal question to understand the wider context of each matter."
+  );
+  about.set(
+    "Established on the principles of integrity, excellence and innovation, we combine sound legal knowledge with an understanding of the commercial realities that shape our clients' decisions.",
+    "Our role is to help clients understand their legal position, identify and manage risk, make informed decisions and pursue their objectives with confidence. Whether acting as transaction counsel, dispute lawyers or ongoing legal advisers, we approach each engagement with professionalism, preparation and a clear focus on the client’s needs."
+  );
+  about.set(
+    "Legal advice must serve commercial objectives. We combine sound law with practical understanding.",
+    "We begin by listening. We seek to understand the facts, circumstances, concerns and objectives behind each matter. The better we understand what the client is trying to achieve, the better we can advise on the way forward."
+  );
+  about.set(
+    "Clear, actionable advice within useful timeframes so clients can make confident decisions.",
+    "We examine the applicable law, documents, evidence, risks and relevant circumstances. Our advice is grounded in thorough legal analysis, careful preparation and an appreciation of the practical implications for the client."
+  );
+  about.set(
+    "We understand your circumstances first, then tailor our approach to the outcome you need.",
+    "We develop a strategy suited to the client’s objectives and assist in implementing it through drafting and reviewing documents, negotiation, regulatory engagement, transaction management, alternative dispute resolution or representation before the courts."
+  );
+  about.set("Honesty, professionalism and respect in everything we do.", "We conduct our practice with honesty, professionalism and respect for our ethical obligations.");
+  about.set("High standards of legal work and professional service.", "We value rigorous analysis, careful research, thorough preparation and continuous professional development.");
+  about.set(
+    "From start-ups and SMEs to established companies, investors and families, we provide commercially focused legal support across the business and investment lifecycle.",
+    "We value relationships that extend beyond a single legal matter. For businesses in particular, our role can extend beyond individual matters to provide continuing legal support as their operations develop and their legal needs evolve. Our aim is to become a trusted legal adviser and long-term partner."
+  );
+
+  practice.set(
+    "Commercially focused legal support across the full business and investment lifecycle.",
+    "At Forland & Company Advocates, we provide legal advice and representation across a range of commercial, contentious, transactional and advisory matters, tailored to each client’s objectives, circumstances, risks and opportunities."
+  );
+
+  contact.set(
+    "Whether you are building a business, entering a transaction, investing in Kenya or resolving a dispute, we are ready to help.",
+    "Whether you require legal advice, representation, assistance with a transaction, support with a business project or ongoing legal counsel, Forland & Company Advocates is available to discuss your requirements."
+  );
+  contact.set(
+    "Share a brief description of your matter and a member of our team will respond to arrange a suitable time to discuss your objectives.",
+    "Tell us briefly about your legal matter and our team will get in touch with you. You do not need to have a complete understanding of your legal position before contacting us; we can assist you in assessing the matter and determining the appropriate course of action."
+  );
 
   function replaceText(root, map) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
