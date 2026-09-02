@@ -83,7 +83,7 @@
     ["Visit our office", "Find Our Office"],
   ]);
 
-  const routeMaps = { "/": home, "/about": about, "/practice-areas": practice, "/contact": contact };
+  const routeMaps = { "/": home, "/about": about, "/practice-areas": practice, "/insights": insights, "/contact": contact };
 
   // Approved copy from WEBSITEEE (1).docx. Yellow-highlighted Insights
   // category copy is intentionally excluded.

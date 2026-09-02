@@ -44,6 +44,12 @@ function DetailedPracticePage({practice:e}){return(0,k.useEffect)(()=>{document.
     : bundle.replace(marker, practicePages + marker);
 }
 
+if (!bundle.includes('function InsightsPage(){')) {
+  const marker = 'function ProductionLegalPage(';
+  const insightsPage = String.raw`function InsightsPage(){return(0,A.jsxs)(\`main\`,{children:[(0,A.jsx)(ms,{eyebrow:\`Insights\`,title:\`Legal Knowledge. Commercial Perspective. Practical Guidance.\`,subtitle:\`Practical legal commentary and updates designed to help businesses, investors, professionals and individuals understand developments that may affect them.\`}),(0,A.jsx)(\`section\`,{className:\`bg-background-50 py-16 md:py-24\`,children:(0,A.jsx)(\`div\`,{className:\`w-full px-4 md:px-8\`,children:(0,A.jsx)(\`div\`,{className:\`mx-auto max-w-[1400px]\`,children:(0,A.jsx)(\`div\`,{className:\`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5\`,children:us.map((e,t)=>(0,A.jsx)(H,{delay:t%3*120,children:(0,A.jsxs)(Ao,{to:\`/insights\`,className:\`group block h-full bg-background-50 border border-background-200 rounded-lg overflow-hidden\`,children:[(0,A.jsxs)(\`div\`,{className:\`editorial-img relative aspect-[3/2] overflow-hidden\`,children:[(0,A.jsx)(\`img\`,{src:e.image,alt:e.title,className:\`w-full h-full object-cover object-top\`}),(0,A.jsx)(\`span\`,{className:\`absolute top-3 left-3 px-2.5 py-1 text-[0.6rem] font-bold tracking-[0.15em] uppercase bg-background-50/90 text-primary-800 rounded-full\`,children:e.category})]}),(0,A.jsxs)(\`div\`,{className:\`p-5\`,children:[(0,A.jsx)(\`h2\`,{className:\`font-heading text-base font-semibold leading-snug text-primary-800 group-hover:text-accent-600 transition-colors duration-300\`,children:e.title}),(0,A.jsx)(\`p\`,{className:\`mt-2 text-xs leading-relaxed text-foreground-400\`,children:e.preview})]})]})},e.id))})})})})]})}`.replaceAll('\\`','`');
+  bundle = bundle.replace(marker, insightsPage + marker);
+}
+
 const notFoundStart = bundle.lastIndexOf('function Bo(){let e=wa();return');
 const notFoundEnd = bundle.indexOf('var Vo=', notFoundStart);
 if (notFoundStart < 0 || notFoundEnd < 0) throw new Error('Could not find the 404 component.');
@@ -70,6 +76,10 @@ bundle = bundle.slice(0, teamStart) + teamPage + bundle.slice(teamEnd);
 bundle = bundle
   .replaceAll('{path:`/insights`,element:(0,A.jsx)(bs,{})}', '{path:`/our-team`,element:(0,A.jsx)(bs,{})}')
   .replaceAll('{label:`Insights`,to:`/insights`}', '{label:`Our Team`,to:`/our-team`}');
+if (!bundle.includes('{path:`/insights`,element:(0,A.jsx)(InsightsPage,{})}')) {
+  bundle = bundle.replace('{path:`/our-team`,element:', '{path:`/insights`,element:(0,A.jsx)(InsightsPage,{})},{path:`/our-team`,element:');
+}
+bundle = bundle.replaceAll('{label:`Industries`,to:`/#industries`}', '{label:`Insights`,to:`/insights`}');
 
 if (!bundle.includes('id:`technology-data-ip`')) {
   bundle = bundle.replace('],Xo={"corporate-commercial"', ',{id:`technology-data-ip`,number:`06`,name:`Technology, Data Protection & Intellectual Property`,icon:`ri-code-s-slash-line`,short:`Legal support for technology, data, intellectual property and the digital economy.`,cta:`DISCUSS YOUR TECHNOLOGY OR DATA MATTER`,items:PracticeDetails[`technology-data-ip`].services},{id:`construction-projects`,number:`09`,name:`Construction, Infrastructure & Projects`,icon:`ri-building-4-line`,short:`Coordinated legal support for construction and infrastructure projects from inception to completion.`,cta:`DISCUSS YOUR PROJECT WITH US`,items:PracticeDetails[`construction-projects`].services}],Xo={"corporate-commercial"');

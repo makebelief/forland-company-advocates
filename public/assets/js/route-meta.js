@@ -12,6 +12,10 @@
       title: 'Practice Areas | Forland & Company Advocates',
       description: 'Explore corporate, commercial, dispute resolution, property, employment, finance, immigration and energy legal services.',
     },
+    '/insights': {
+      title: 'Legal Insights | Forland & Company Advocates',
+      description: 'Practical legal and commercial perspectives for businesses, investors and entrepreneurs operating in Kenya.',
+    },
     '/our-team': {
       title: 'Our Team | Forland & Company Advocates',
       description: 'Meet the team providing practical, strategic and client-focused legal counsel at Forland & Company Advocates.',
