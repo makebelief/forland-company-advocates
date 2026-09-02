@@ -74,12 +74,14 @@ const teamPage = String.raw`function bs(){return(0,A.jsxs)(\`main\`,{children:[(
 
 bundle = bundle.slice(0, teamStart) + teamPage + bundle.slice(teamEnd);
 bundle = bundle
-  .replaceAll('{path:`/insights`,element:(0,A.jsx)(bs,{})}', '{path:`/our-team`,element:(0,A.jsx)(bs,{})}')
-  .replaceAll('{label:`Insights`,to:`/insights`}', '{label:`Our Team`,to:`/our-team`}');
+  .replaceAll('{path:`/insights`,element:(0,A.jsx)(bs,{})}', '{path:`/our-team`,element:(0,A.jsx)(bs,{})}');
 if (!bundle.includes('{path:`/insights`,element:(0,A.jsx)(InsightsPage,{})}')) {
   bundle = bundle.replace('{path:`/our-team`,element:', '{path:`/insights`,element:(0,A.jsx)(InsightsPage,{})},{path:`/our-team`,element:');
 }
 bundle = bundle.replaceAll('{label:`Industries`,to:`/#industries`}', '{label:`Insights`,to:`/insights`}');
+bundle = bundle
+  .replace(/var js=\[[^;]+?\];function Ms/, 'var js=[{label:`Home`,to:`/`},{label:`About`,to:`/about`},{label:`Insights`,to:`/insights`},{label:`Our Team`,to:`/our-team`},{label:`Contact`,to:`/contact`}];function Ms')
+  .replace(/var Ns=\[[^;]+?\];function Ps/, 'var Ns=[{label:`Home`,to:`/`},{label:`About`,to:`/about`},{label:`Practice Areas`,to:`/practice-areas`},{label:`Insights`,to:`/insights`},{label:`Our Team`,to:`/our-team`},{label:`Contact`,to:`/contact`}];function Ps');
 
 if (!bundle.includes('id:`technology-data-ip`')) {
   bundle = bundle.replace('],Xo={"corporate-commercial"', ',{id:`technology-data-ip`,number:`06`,name:`Technology, Data Protection & Intellectual Property`,icon:`ri-code-s-slash-line`,short:`Legal support for technology, data, intellectual property and the digital economy.`,cta:`DISCUSS YOUR TECHNOLOGY OR DATA MATTER`,items:PracticeDetails[`technology-data-ip`].services},{id:`construction-projects`,number:`09`,name:`Construction, Infrastructure & Projects`,icon:`ri-building-4-line`,short:`Coordinated legal support for construction and infrastructure projects from inception to completion.`,cta:`DISCUSS YOUR PROJECT WITH US`,items:PracticeDetails[`construction-projects`].services}],Xo={"corporate-commercial"');
