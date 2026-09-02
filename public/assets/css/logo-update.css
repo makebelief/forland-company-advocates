@@ -7,9 +7,12 @@
 }
 
 header .official-site-logo {
-  width: min(310px, 62vw);
-  height: auto;
-  transform: translateY(-4px);
+  width: min(330px, 62vw);
+  height: 64px;
+  aspect-ratio: auto;
+  background: url("/assets/media/forland-header-logo.png?v=20260902-1") left center / contain no-repeat;
+  -webkit-mask: none;
+  mask: none;
 }
 
 header a.bg-accent-500 {
@@ -25,6 +28,6 @@ footer .official-site-logo {
 @media (max-width: 480px) {
   header .official-site-logo {
     width: 230px;
-    height: auto;
+    height: 58px;
   }
 }
