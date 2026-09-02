@@ -1,0 +1,14 @@
+.practice-menu-dropdown {
+  width: min(440px, calc(100vw - 32px));
+}
+
+.practice-menu-dropdown a {
+  white-space: normal;
+  line-height: 1.35;
+}
+
+@media (max-width: 1100px) {
+  .practice-menu-dropdown {
+    width: min(360px, calc(100vw - 32px));
+  }
+}

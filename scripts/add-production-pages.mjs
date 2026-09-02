@@ -98,7 +98,8 @@ if (!bundle.includes('PracticeAreaOrder.indexOf')) {
 }
 bundle = bundle
   .replace('"energy-emobility":`/assets/media/pa-energy.jpg`}', '"energy-emobility":`/assets/media/pa-energy.jpg`,"technology-data-ip":`/assets/media/insight-06.jpg`,"construction-projects":`/assets/media/ind-bg.jpg`}')
-  .replace('top-full pt-5 w-[300px]', 'top-full pt-5 w-[440px] max-w-[calc(100vw-2rem)]')
+  .replace('top-full pt-5 w-[300px]', 'top-full pt-5 practice-menu-dropdown')
+  .replace('top-full pt-5 w-[440px] max-w-[calc(100vw-2rem)]', 'top-full pt-5 practice-menu-dropdown')
   .replace('transition-colors duration-200 whitespace-nowrap`,children:e.name', 'transition-colors duration-200 leading-snug`,children:e.name');
 
 const practiceRoutes = Object.keys({
