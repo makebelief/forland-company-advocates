@@ -1,7 +1,7 @@
 (() => {
   // Forland & Company Advocates — contact phone wiring
   // WhatsApp/business line displayed first; direct call line displayed after a slash.
-  const CALL_DISPLAY = "0713001575";
+  const CALL_DISPLAY = "+254 713 001 575";
   const CALL_TEL     = "tel:+254713001575";
   const WA_DISPLAY   = "+254 753 504 745";
   const WA_URL       = "https://wa.me/254753504745";
@@ -37,7 +37,7 @@
     let node;
     while ((node = walker.nextNode())) {
       const text = (node.nodeValue || "").trim();
-      if (text === WA_DISPLAY || text === "+254 713 001 575" || text === "0713 001 575" || text === CALL_DISPLAY || text === COMBINED) {
+      if (text === WA_DISPLAY || text === "+254 713 001 575" || text === "0713 001 575" || text === "0713001575" || text === CALL_DISPLAY || text === COMBINED) {
         matches.push(node);
       }
     }

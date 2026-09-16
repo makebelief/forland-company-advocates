@@ -10,7 +10,7 @@
       <a class="contact-rail-link" href="https://wa.me/254753504745" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
         <i class="ri-whatsapp-line" aria-hidden="true"></i>
       </a>
-      <a class="contact-rail-link" href="tel:+254713001575" aria-label="Call 0713 001 575">
+      <a class="contact-rail-link" href="tel:+254713001575" aria-label="Call +254 713 001 575">
         <i class="ri-phone-fill" aria-hidden="true"></i>
       </a>
     </div>`;

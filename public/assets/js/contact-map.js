@@ -7,7 +7,7 @@
         "Office details provided when appointments are confirmed",
         "Landmark Plaza, 4th Floor, Left Wing, Argwings Kodhek Road",
       ],
-      ["Available on request", "+254 753 504 745 / 0713001575"],
+      ["Available on request", "+254 753 504 745 / +254 713 001 575"],
     ]);
 
     main.querySelectorAll("p").forEach((element) => {

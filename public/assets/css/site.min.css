@@ -10,3 +10,10 @@ html,body,button,input,textarea,select{font-family:var(--font-heading)}
   .text-base,.md\:text-base{font-size:1.125rem;line-height:1.75rem}
   .text-lg{font-size:1.25rem;line-height:1.875rem}
 }
+
+
+/* Client readability refinement: slightly darker secondary text */
+.text-foreground-300{--tw-text-opacity:1;color:rgb(132 143 160/var(--tw-text-opacity,1))}
+.text-foreground-400{--tw-text-opacity:1;color:rgb(82 94 115/var(--tw-text-opacity,1))}
+.text-foreground-500{--tw-text-opacity:1;color:rgb(57 70 91/var(--tw-text-opacity,1))}
+.text-foreground-600{--tw-text-opacity:1;color:rgb(43 55 74/var(--tw-text-opacity,1))}

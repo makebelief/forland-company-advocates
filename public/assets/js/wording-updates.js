@@ -1,7 +1,7 @@
 (() => {
   const shared = new Map([
     ["Practical legal solutions for business, investment and growth. A Kenyan law firm committed to integrity, excellence and innovation.", "Providing strategic legal counsel for today's opportunities and challenges."],
-    ["Available on request", "+254 753 504 745 / 0713001575"],
+    ["Available on request", "+254 753 504 745 / +254 713 001 575"],
     ["Use the secure inquiry form", "forlandcompanyadvocates@gmail.com"],
     ["Office details provided when appointments are confirmed", "Landmark Plaza, 4th Floor, Left Wing, Argwings Kodhek Road"],
   ]);
