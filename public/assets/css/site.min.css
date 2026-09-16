@@ -2,3 +2,11 @@
 
 /* Client typography update: use the heading family consistently site-wide. */
 html,body,button,input,textarea,select{font-family:var(--font-heading)}
+
+/* Desktop readability update: slightly larger supporting text on laptop/desktop screens. */
+@media (min-width:1024px){
+  .text-xs,.md\:text-xs{font-size:.875rem;line-height:1.25rem}
+  .text-sm{font-size:1rem;line-height:1.55rem}
+  .text-base,.md\:text-base{font-size:1.125rem;line-height:1.75rem}
+  .text-lg{font-size:1.25rem;line-height:1.875rem}
+}
