@@ -13,7 +13,7 @@
 header .official-site-logo {
   width: auto;
   height: 60px;
-  aspect-ratio: 2076 / 645;
+  aspect-ratio: 2048 / 645;
   background-image: url("/assets/media/forland-logo-header.png");
 }
 
@@ -28,6 +28,6 @@ footer .official-site-logo {
   header .official-site-logo {
     width: auto;
     height: 46px;
-    aspect-ratio: 2076 / 645;
+    aspect-ratio: 2048 / 645;
   }
 }
