@@ -11,13 +11,9 @@ header .official-site-logo {
   height: 56px;
   flex-shrink: 0;
   aspect-ratio: auto;
-  background-image: url("/assets/media/forland-header-logo.png?v=20260902-3");
-  background-position: -7px center;
-  background-size: auto 71px;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  -webkit-mask: none;
-  mask: none;
+  background-color: #081120;
+  -webkit-mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
+  mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
 }
 
 header a.bg-accent-500 {
