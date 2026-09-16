@@ -12,8 +12,8 @@ html,body,button,input,textarea,select{font-family:var(--font-heading)}
 }
 
 
-/* Client readability refinement: slightly darker secondary text */
-.text-foreground-300{--tw-text-opacity:1;color:rgb(132 143 160/var(--tw-text-opacity,1))}
-.text-foreground-400{--tw-text-opacity:1;color:rgb(82 94 115/var(--tw-text-opacity,1))}
-.text-foreground-500{--tw-text-opacity:1;color:rgb(57 70 91/var(--tw-text-opacity,1))}
-.text-foreground-600{--tw-text-opacity:1;color:rgb(43 55 74/var(--tw-text-opacity,1))}
+/* Client readability refinement: secondary text darkened a further 20% */
+.text-foreground-300{--tw-text-opacity:1;color:rgb(106 114 128/var(--tw-text-opacity,1))}
+.text-foreground-400{--tw-text-opacity:1;color:rgb(66 75 92/var(--tw-text-opacity,1))}
+.text-foreground-500{--tw-text-opacity:1;color:rgb(46 56 73/var(--tw-text-opacity,1))}
+.text-foreground-600{--tw-text-opacity:1;color:rgb(34 44 59/var(--tw-text-opacity,1))}
