@@ -3,7 +3,7 @@ export const site = {
   shortName: 'Forland Advocates',
   origin: 'https://forlandcompanyadvocates.co.ke',
   email: 'forlandcompanyadvocates@gmail.com',
-  telephone: '+254713001575',
+  telephone: '+254753504745',
   image: '/assets/media/hero-poster-nairobi.jpg',
   logo: '/favicon-logo-master.png',
 };

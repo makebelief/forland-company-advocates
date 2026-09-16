@@ -7,7 +7,7 @@
         "Office details provided when appointments are confirmed",
         "Landmark Plaza, 4th Floor, Left Wing, Argwings Kodhek Road",
       ],
-      ["Available on request", "+254 713 001 575"],
+      ["Available on request", "+254 753 504 745"],
     ]);
 
     main.querySelectorAll("p").forEach((element) => {
@@ -16,10 +16,13 @@
 
       if (replacement.startsWith("+254")) {
         const link = document.createElement("a");
-        link.href = "tel:+254713001575";
+        link.href = "https://wa.me/254753504745";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
         link.className = element.className;
         link.textContent = replacement;
-        link.setAttribute("aria-label", "Call Forland and Company Advocates");
+        link.setAttribute("aria-label", "Chat with us on WhatsApp: +254 753 504 745");
+        link.setAttribute("data-forland-phone", "number");
         element.replaceWith(link);
       } else {
         element.textContent = replacement;

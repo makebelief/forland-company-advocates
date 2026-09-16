@@ -7,7 +7,7 @@
       <i class="ri-arrow-right-line contact-rail-arrow" aria-hidden="true"></i>
     </button>
     <div class="contact-rail-actions">
-      <a class="contact-rail-link" href="https://wa.me/254713001575" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+      <a class="contact-rail-link" href="https://wa.me/254753504745" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
         <i class="ri-whatsapp-line" aria-hidden="true"></i>
       </a>
       <a class="contact-rail-link" href="tel:+254713001575" aria-label="Call 0713 001 575">
