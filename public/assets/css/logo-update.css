@@ -1,34 +1,33 @@
+/* Forland & Company Advocates — real firm logos
+   header: navy logo  => assets/media/forland-logo-header.png
+   footer: gold logo  => assets/media/forland-logo-footer.png
+   Images are transparent-backed; drawn to their natural aspect ratio. */
+
 .official-site-logo {
-  display: block;
-  aspect-ratio: 695 / 177;
-  background-color: #0b172a;
-  -webkit-mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
-  mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
+  display: inline-block;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 header .official-site-logo {
-  width: min(340px, 62vw);
-  height: 56px;
-  flex-shrink: 0;
-  aspect-ratio: auto;
-  background-color: #081120;
-  -webkit-mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
-  mask: url("/assets/media/forland-logo.png") center / contain no-repeat;
-}
-
-header a.bg-accent-500 {
-  color: #fff;
+  width: auto;
+  height: 60px;
+  aspect-ratio: 2076 / 645;
+  background-image: url("/assets/media/forland-logo-header.png");
 }
 
 footer .official-site-logo {
-  width: min(310px, 100%);
+  width: min(320px, 88%);
   height: auto;
-  background-color: #b89a5c;
+  aspect-ratio: 2076 / 653;
+  background-image: url("/assets/media/forland-logo-footer.png");
 }
 
 @media (max-width: 480px) {
   header .official-site-logo {
-    width: min(240px, 68vw);
-    height: 48px;
+    width: auto;
+    height: 46px;
+    aspect-ratio: 2076 / 645;
   }
 }
