@@ -1,6 +1,6 @@
 /* Forland & Company Advocates — real firm logos
-   header: navy logo  => assets/media/forland-logo-header.png
-   footer: gold logo  => assets/media/forland-logo-footer.png
+   header: navy logo  => assets/media/forland-logo-header.webp
+   footer: gold logo  => assets/media/forland-logo-footer.webp
    Images are transparent-backed; drawn to their natural aspect ratio. */
 
 .official-site-logo {
@@ -14,14 +14,14 @@ header .official-site-logo {
   width: auto;
   height: 60px;
   aspect-ratio: 2048 / 645;
-  background-image: url("/assets/media/forland-logo-header.png");
+  background-image: url("/assets/media/forland-logo-header.webp");
 }
 
 footer .official-site-logo {
   width: min(320px, 88%);
   height: auto;
   aspect-ratio: 2076 / 653;
-  background-image: url("/assets/media/forland-logo-footer.png");
+  background-image: url("/assets/media/forland-logo-footer.webp");
 }
 
 @media (max-width: 480px) {

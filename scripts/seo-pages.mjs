@@ -1,118 +1,339 @@
 export const site = {
   name: 'Forland & Company Advocates',
   shortName: 'Forland Advocates',
+  description: 'A Nairobi-based Kenyan law firm providing practical legal advice for business, investment, property, employment, technology and dispute resolution matters.',
   origin: 'https://forlandcompanyadvocates.co.ke',
+  locale: 'en-KE',
+  language: 'en',
   email: 'forlandcompanyadvocates@gmail.com',
-  telephone: '+254753504745',
-  image: '/assets/media/hero-poster-nairobi.jpg',
-  logo: '/favicon-logo-master.png',
+  telephone: '+254713001575',
+  whatsapp: '+254753504745',
+  openingHours: {
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00',
+  },
+  address: {
+    streetAddress: '4th Floor, Left Wing, Landmark Plaza, Argwings Kodhek Road',
+    addressLocality: 'Nairobi',
+    addressCountry: 'KE',
+  },
+  logo: {
+    src: '/favicon-logo-master.png',
+    width: 1254,
+    height: 1254,
+  },
 };
 
-const page = (title, description, type = 'website') => ({ title, description, type });
+const image = (src, width, height, alt) => ({ src, width, height, alt });
+
+export const images = {
+  home: image('/assets/media/hero-poster-nairobi.jpg', 1600, 896, 'Nairobi skyline at dusk'),
+  about: image('/assets/media/about-firm.jpg', 1600, 1068, 'Legal professionals collaborating in a modern office'),
+  practiceAreas: image('/assets/media/client-update/legal-scales-gavel.jpeg', 853, 1280, 'Scales of justice and a legal gavel on a desk'),
+  corporate: image('/assets/media/client-practice/corporate-commercial-alternative.jpg', 1440, 1800, 'Nairobi city centre and commercial buildings'),
+  litigation: image('/assets/media/client-practice/litigation-dispute.png', 700, 400, 'Supreme Court of Kenya building in Nairobi'),
+  realEstate: image('/assets/media/client-practice/real-estate.jpg', 1800, 1351, 'Model home and keys representing a property transaction'),
+  employment: image('/assets/media/client-sept18/employment-agreement.jpg', 739, 493, 'Employment agreement and workplace documents'),
+  banking: image('/assets/media/client-practice/banking-finance.jpg', 1800, 1200, 'Person using a bank cash machine'),
+  technology: image('/assets/media/client-practice/technology-data-protection.jpg', 1800, 1201, 'Combination lock and payment cards representing data security'),
+  immigration: image('/assets/media/client-practice/immigration-mobility.jpg', 1800, 1534, 'Passport and visa stamps representing international mobility'),
+  estate: image('/assets/media/client-practice/family-succession-estate-planning.jpg', 612, 408, 'Will, estate inventory and house keys'),
+  construction: image('/assets/media/client-practice/construction-projects.jpg', 1800, 1200, 'Excavators working on a major construction site'),
+  energy: image('/assets/media/client-practice/electric-mobility.jpg', 1440, 1800, 'Electric vehicle connected to a charging point'),
+  businessGuide: image('/assets/media/kenya-business.jpg', 1600, 1067, 'Business professionals planning a Kenyan venture'),
+  contractGuide: image('/assets/media/client-sept18/commercial-contract.jpg', 739, 492, 'Commercial contract documents ready for review'),
+  governanceGuide: image('/assets/media/client-sept18/corporate-office.jpg', 739, 494, 'Corporate boardroom prepared for a governance meeting'),
+  propertyGuide: image('/assets/media/client-sept18/real-estate-apartments.jpg', 739, 555, 'Apartment buildings representing Kenyan property investment'),
+  employmentGuide: image('/assets/media/client-sept18/employment-agreement.jpg', 739, 493, 'Employment agreement and workplace documents'),
+  team: image('/assets/media/client-sept18/team-collaboration.jpg', 739, 492, 'Professional legal team collaborating around a work table'),
+  contact: image('/assets/media/client-update/legal-consultation.jpeg', 1280, 851, 'Legal professionals reviewing documents with a client'),
+};
+
+const page = (title, description, options = {}) => ({
+  title,
+  description,
+  breadcrumbLabel: options.breadcrumbLabel || options.eyebrow || title.split(' | ')[0],
+  type: 'website',
+  schemaType: 'WebPage',
+  h1: title.split(' | ')[0],
+  eyebrow: 'Forland & Company Advocates',
+  image: images.home,
+  topics: [],
+  ...options,
+});
 
 export const pages = {
   '/': page(
     'Corporate & Commercial Lawyers in Nairobi | Forland Advocates',
     'Nairobi law firm advising businesses, investors and individuals on corporate, commercial, property, disputes, employment, finance and investment law in Kenya.',
+    {
+      h1: 'Practical Legal Solutions for Business, Investment and Growth',
+      eyebrow: 'Law Firm in Nairobi, Kenya',
+      heroEyebrow: 'Forland & Company Advocates',
+      heroDescription: 'Forland & Company Advocates is a modern Kenyan law firm providing practical, strategic and client-focused legal solutions to businesses, investors, entrepreneurs and individuals. We advise and represent our clients across a broad range of legal matters, helping them navigate transactions, manage risk, resolve disputes, protect their interests and pursue their commercial and personal objectives.',
+      image: images.home,
+      topics: ['Corporate and commercial law', 'Dispute resolution', 'Real estate and conveyancing', 'Employment law', 'Banking and finance', 'Technology and data protection'],
+    },
   ),
   '/about': page(
     'About Our Nairobi Law Firm | Forland Advocates',
     'Meet Forland & Company Advocates, a Nairobi law firm providing strategic, commercially focused legal counsel to businesses, investors and individuals in Kenya.',
+    {
+      schemaType: 'AboutPage',
+      h1: 'A Modern Kenyan Law Firm Built Around Your Objectives',
+      eyebrow: 'About the Firm',
+      image: images.about,
+      topics: ['Practical legal advice', 'Commercial awareness', 'Responsive client service', 'Integrity and professional excellence'],
+    },
   ),
   '/practice-areas': page(
     'Legal Services & Practice Areas in Kenya | Forland Advocates',
     'Explore our legal services in corporate law, litigation, property, employment, banking, technology, immigration, succession, construction and clean energy.',
+    {
+      schemaType: 'CollectionPage',
+      h1: 'Legal Services Built Around Your Objectives',
+      eyebrow: 'Practice Areas',
+      image: images.practiceAreas,
+    },
   ),
   '/practice-areas/corporate-commercial': page(
     'Corporate & Commercial Lawyers Kenya | Forland Advocates',
     'Corporate and commercial lawyers in Nairobi advising on company formation, contracts, governance, transactions, restructuring, due diligence and compliance in Kenya.',
+    {
+      h1: 'Corporate and Commercial Law in Kenya',
+      eyebrow: 'Corporate & Commercial',
+      image: images.corporate,
+      topics: ['Company formation and structuring', 'Commercial contracts', 'Corporate governance', 'Mergers and acquisitions', 'Due diligence', 'Regulatory compliance'],
+    },
   ),
   '/practice-areas/litigation-dispute': page(
     'Litigation & Dispute Resolution Lawyers Kenya | Forland Advocates',
     'Strategic representation in Kenyan commercial, contractual, property, employment and shareholder disputes, including negotiation, mediation, arbitration and litigation.',
+    {
+      h1: 'Litigation and Dispute Resolution in Kenya',
+      eyebrow: 'Litigation & Dispute Resolution',
+      image: images.litigation,
+      topics: ['Commercial litigation', 'Contract disputes', 'Shareholder disputes', 'Property disputes', 'Mediation and negotiation', 'Arbitration'],
+    },
   ),
   '/practice-areas/real-estate': page(
     'Real Estate & Conveyancing Lawyers Kenya | Forland Advocates',
     'Nairobi property lawyers handling conveyancing, land due diligence, sales, purchases, leases, developments, securities and real estate disputes across Kenya.',
+    {
+      h1: 'Real Estate and Conveyancing Law in Kenya',
+      eyebrow: 'Real Estate & Conveyancing',
+      image: images.realEstate,
+      topics: ['Property due diligence', 'Land sales and purchases', 'Commercial and residential leases', 'Property development', 'Securities and charges', 'Real estate disputes'],
+    },
   ),
   '/practice-areas/employment-labour': page(
     'Employment & Labour Lawyers Kenya | Forland Advocates',
     'Employment lawyers advising Kenyan employers and employees on contracts, policies, compliance, discipline, termination, redundancy and workplace disputes.',
+    {
+      h1: 'Employment and Labour Law in Kenya',
+      eyebrow: 'Employment & Labour',
+      image: images.employment,
+      topics: ['Employment contracts', 'Workplace policies', 'Labour compliance', 'Disciplinary procedures', 'Termination and redundancy', 'Employment disputes'],
+    },
   ),
   '/practice-areas/banking-finance': page(
     'Banking & Finance Lawyers Kenya | Forland Advocates',
     'Legal advice for lenders, borrowers and investors on loans, securities, mortgages, guarantees, restructuring, enforcement and financing transactions in Kenya.',
+    {
+      h1: 'Banking and Finance Law in Kenya',
+      eyebrow: 'Banking & Finance',
+      image: images.banking,
+      topics: ['Loan documentation', 'Securities and mortgages', 'Guarantees', 'Project and asset finance', 'Debt restructuring', 'Enforcement'],
+    },
   ),
   '/practice-areas/technology-data-ip': page(
     'Technology, Data Protection & IP Lawyers Kenya | Forland Advocates',
     'Kenyan legal counsel for technology contracts, data protection compliance, privacy, software licensing, trademarks, copyright and digital businesses.',
+    {
+      h1: 'Technology, Data Protection and Intellectual Property Law',
+      eyebrow: 'Technology, Data & IP',
+      image: images.technology,
+      topics: ['Data protection compliance', 'Privacy policies and notices', 'Technology contracts', 'Software licensing', 'Trademarks and copyright', 'Digital business advisory'],
+    },
   ),
   '/practice-areas/immigration-mobility': page(
     'Immigration & Business Mobility Lawyers Kenya | Forland Advocates',
     'Kenya immigration legal services for work permits, passes, investor immigration, foreign employees, residency matters and corporate immigration compliance.',
+    {
+      h1: 'Immigration and Business Mobility in Kenya',
+      eyebrow: 'Immigration & Business Mobility',
+      image: images.immigration,
+      topics: ['Work permits and passes', 'Investor immigration', 'Foreign employee mobility', 'Dependent passes', 'Residency matters', 'Corporate immigration compliance'],
+    },
   ),
   '/practice-areas/estate-planning': page(
     'Succession & Estate Planning Lawyers Kenya | Forland Advocates',
     'Legal advice on wills, trusts, probate, letters of administration, succession planning, estate distribution and family property matters in Kenya.',
+    {
+      h1: 'Family, Succession and Estate Planning in Kenya',
+      eyebrow: 'Succession & Estate Planning',
+      image: images.estate,
+      topics: ['Wills and trusts', 'Probate', 'Letters of administration', 'Succession planning', 'Estate administration', 'Family property matters'],
+    },
   ),
   '/practice-areas/construction-projects': page(
     'Construction & Infrastructure Lawyers Kenya | Forland Advocates',
     'Legal support for Kenyan construction and infrastructure projects, including contracts, procurement, financing, due diligence, claims and dispute resolution.',
+    {
+      h1: 'Construction, Infrastructure and Projects Law in Kenya',
+      eyebrow: 'Construction & Infrastructure',
+      image: images.construction,
+      topics: ['Construction contracts', 'Procurement and project documentation', 'Construction due diligence', 'Project financing', 'Claims management', 'Construction disputes'],
+    },
   ),
   '/practice-areas/energy-emobility': page(
     'Clean Energy & E-Mobility Lawyers Kenya | Forland Advocates',
     'Legal counsel for electric mobility, charging infrastructure, battery swapping, clean energy investment, sustainable transport and related regulation in Kenya.',
+    {
+      h1: 'Electric Mobility, Clean Energy and Sustainable Transport',
+      eyebrow: 'Energy & E-Mobility',
+      image: images.energy,
+      topics: ['Electric mobility', 'Charging infrastructure', 'Battery swapping', 'Clean energy investment', 'Sustainable transport', 'Energy regulation'],
+    },
   ),
   '/insights': page(
     'Kenya Legal Insights for Business | Forland Advocates',
     'Practical Kenyan legal insights on business formation, commercial contracts, governance, property, employment compliance and electric mobility.',
+    {
+      schemaType: 'CollectionPage',
+      h1: 'Kenya Legal Insights for Business and Investors',
+      eyebrow: 'Legal Insights',
+      image: images.businessGuide,
+    },
   ),
   '/insights/establishing-business': page(
     'Establishing a Business in Kenya: Legal Guide | Forland Advocates',
     'A practical legal guide to choosing a structure, registering, governing and maintaining regulatory compliance when establishing a business in Kenya.',
-    'article',
+    {
+      type: 'article',
+      h1: 'Key Legal Considerations When Establishing a Business in Kenya',
+      eyebrow: 'Corporate Law Guide',
+      image: images.businessGuide,
+      articleSection: 'Corporate & Commercial',
+      topics: ['Business structures', 'Founder agreements', 'Intellectual property', 'Business licences', 'Tax registrations', 'Continuing compliance'],
+      dateModified: '2026-09-18',
+    },
   ),
   '/insights/commercial-agreement': page(
     'Commercial Agreements in Kenya: Drafting Guide | Forland Advocates',
     'Key legal issues Kenyan businesses should address when reviewing and negotiating commercial agreements, obligations, risk allocation and dispute clauses.',
-    'article',
+    {
+      type: 'article',
+      h1: 'What to Consider Before Signing a Commercial Agreement',
+      eyebrow: 'Commercial Law Guide',
+      image: images.contractGuide,
+      articleSection: 'Commercial Law',
+      topics: ['Commercial terms', 'Warranties and indemnities', 'Liability caps', 'Contract variations', 'Termination', 'Dispute resolution'],
+      dateModified: '2026-09-18',
+    },
   ),
   '/insights/emobility-sector': page(
     'Kenya E-Mobility Sector: Legal Considerations | Forland Advocates',
     'Legal and regulatory considerations for electric vehicles, charging networks, battery swapping, investment and sustainable mobility businesses in Kenya.',
-    'article',
+    {
+      type: 'article',
+      h1: 'Legal Opportunities in Kenya’s E-Mobility Sector',
+      eyebrow: 'Energy & E-Mobility Guide',
+      image: images.energy,
+      articleSection: 'Energy & E-Mobility',
+      topics: ['E-mobility regulation', 'Charging networks', 'Battery services', 'Infrastructure contracts', 'Financing', 'Data and technology'],
+      dateModified: '2026-09-18',
+    },
   ),
   '/insights/corporate-governance': page(
     'Corporate Governance in Kenya: Practical Guide | Forland Advocates',
     'A practical guide to governance structures, director duties, decision-making, records and risk management for companies operating in Kenya.',
-    'article',
+    {
+      type: 'article',
+      h1: 'Understanding Corporate Governance for Growing Businesses',
+      eyebrow: 'Corporate Governance Guide',
+      image: images.governanceGuide,
+      articleSection: 'Corporate & Commercial',
+      topics: ['Board governance', 'Director duties', 'Corporate records', 'Conflicts of interest', 'Risk controls', 'Investment readiness'],
+      dateModified: '2026-09-18',
+    },
   ),
   '/insights/property-due-diligence': page(
     'Property Due Diligence in Kenya: Buyer Guide | Forland Advocates',
     'What property buyers and investors should verify before completing a land or real estate transaction in Kenya, from title searches to approvals.',
-    'article',
+    {
+      type: 'article',
+      h1: 'A Practical Guide to Property Due Diligence in Kenya',
+      eyebrow: 'Real Estate Guide',
+      image: images.propertyGuide,
+      articleSection: 'Real Estate & Conveyancing',
+      topics: ['Title searches', 'Seller verification', 'Land inspection', 'Planning approvals', 'Rates and taxes', 'Completion and registration'],
+      dateModified: '2026-09-18',
+    },
   ),
   '/insights/employment-compliance': page(
     'Employment Compliance in Kenya: Employer Guide | Forland Advocates',
     'A practical guide for Kenyan employers covering contracts, records, workplace policies, discipline, termination, redundancy and employee data.',
-    'article',
+    {
+      type: 'article',
+      h1: 'Employment Compliance: What Kenyan Employers Need to Know',
+      eyebrow: 'Employment Law Guide',
+      image: images.employmentGuide,
+      articleSection: 'Employment & Labour',
+      topics: ['Employment contracts', 'Workplace records', 'Employee data', 'Performance management', 'Discipline', 'Termination and redundancy'],
+      dateModified: '2026-09-18',
+    },
   ),
   '/our-team': page(
     'Our Legal Team | Forland & Company Advocates Nairobi',
     'Meet Asbjorn Ng’ani, Managing Partner and Advocate of the High Court of Kenya, and learn about the client-focused approach of our Nairobi law firm.',
+    {
+      schemaType: 'AboutPage',
+      h1: 'Counsel You Can Trust',
+      eyebrow: 'Our Legal Team',
+      image: images.team,
+      topics: ['Corporate and commercial law', 'Dispute resolution', 'Real estate', 'Banking and finance', 'Technology and data', 'Energy and e-mobility'],
+    },
   ),
   '/contact': page(
     'Contact Our Nairobi Lawyers | Forland Advocates',
     'Contact Forland & Company Advocates at Landmark Plaza, Argwings Kodhek Road, Nairobi, for strategic legal advice and representation in Kenya.',
+    {
+      breadcrumbLabel: 'Contact',
+      schemaType: 'ContactPage',
+      h1: 'Talk to a Nairobi Advocate',
+      eyebrow: 'Contact Forland & Company Advocates',
+      image: images.contact,
+      topics: ['Nairobi legal consultation', 'Business legal advice', 'Transaction support', 'Dispute representation'],
+    },
   ),
   '/privacy-policy': page(
     'Privacy Policy | Forland & Company Advocates',
     'Read how Forland & Company Advocates collects, uses, protects and manages personal information submitted through this website.',
+    {
+      breadcrumbLabel: 'Privacy Policy',
+      h1: 'Privacy Policy',
+      eyebrow: 'Legal',
+      image: images.contact,
+      topics: ['Personal information', 'Data use', 'Professional obligations', 'Information security'],
+      dateModified: '2026-08-22',
+    },
   ),
   '/terms-of-use': page(
     'Website Terms of Use | Forland & Company Advocates',
     'Read the terms governing use of the Forland & Company Advocates website, including legal-information, confidentiality and liability notices.',
+    {
+      breadcrumbLabel: 'Terms of Use',
+      h1: 'Website Terms of Use',
+      eyebrow: 'Legal',
+      image: images.contact,
+      topics: ['General legal information', 'No advocate-client relationship', 'Confidentiality', 'Intellectual property'],
+      dateModified: '2026-08-22',
+    },
   ),
 };
 
-export const lastModified = '2026-09-02';
+export const practicePaths = Object.keys(pages).filter((path) => path.startsWith('/practice-areas/'));
+export const insightPaths = Object.keys(pages).filter((path) => path.startsWith('/insights/'));
+export const lastModified = '2026-09-22';

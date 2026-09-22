@@ -7,7 +7,7 @@
   ]);
 
   const home = new Map([
-    ["Practical Legal Solutions for Business, Investment & Growth", "Expertise. Strategy. Results."],
+    ["Practical Legal Solutions for Business, Investment & Growth", "Practical Legal Solutions for Business, Investment and Growth"],
     ["A Kenyan law firm delivering practical, timely and client-focused legal solutions to businesses, investors and individuals.", "Forland & Company Advocates is a modern Kenyan law firm providing practical, strategic and client-focused legal solutions to businesses, investors, entrepreneurs and individuals."],
     ["Legal Advice That Moves Your Objectives Forward", "Legal Advice With Your Objectives in Mind"],
     ["We believe effective legal advice should help clients make better decisions. Whether you are building a business, negotiating an agreement or planning your estate, we provide clear, practical and timely counsel.", "We believe that effective legal advice should go beyond identifying what the law says. It should help you understand your position, assess your options and make confident decisions."],

@@ -1,0 +1,414 @@
+.seo-fallback-shell {
+  min-height: 100vh;
+  background: #f8f7f3;
+  color: #17243a;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.seo-fallback-skip {
+  position: fixed;
+  left: 1rem;
+  top: -5rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  background: #0b172a;
+  color: #fff;
+}
+
+.seo-fallback-skip:focus { top: 1rem; }
+
+.seo-fallback-header {
+  position: relative;
+  z-index: 10;
+  height: 80px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgb(11 23 42 / 8%);
+}
+
+.seo-fallback-header-inner {
+  display: flex;
+  width: min(100% - 4rem, 1400px);
+  height: 100%;
+  margin-inline: auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.seo-fallback-brand {
+  display: block;
+  width: 190px;
+  height: 64px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: center / contain no-repeat url("/assets/media/forland-logo-header.webp");
+  color: transparent;
+  text-indent: -9999px;
+}
+
+.seo-fallback-header-nav {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  gap: 2rem;
+}
+
+.seo-fallback-header ul {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-fallback-header nav a {
+  color: #0b172a;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.seo-fallback-header-cta,
+.seo-fallback-action {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.35rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.seo-fallback-header-cta {
+  padding: 0.75rem 1.6rem;
+  background: #c5a45e;
+  color: #0b172a;
+}
+
+.seo-fallback-mobile-menu {
+  display: none;
+  width: 26px;
+  color: #0b172a;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.seo-fallback-main {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.seo-fallback-hero {
+  position: relative;
+  display: flex;
+  min-height: 430px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #0b172a;
+  isolation: isolate;
+}
+
+.seo-fallback-shell.is-home .seo-fallback-hero {
+  min-height: calc(100vh - 80px);
+}
+
+.seo-fallback-shell.is-inner .seo-fallback-hero {
+  min-height: 265px;
+  justify-content: flex-start;
+  border-bottom: 1px solid #e3e5e8;
+  background: #fff;
+}
+
+.seo-fallback-shell.is-inner .seo-fallback-hero-overlay,
+.seo-fallback-shell.is-inner .seo-fallback-actions { display: none; }
+
+.seo-fallback-shell.is-inner .seo-fallback-hero-content {
+  width: min(100% - 4rem, 1400px);
+  margin-inline: auto;
+  padding: 4.7rem 0 4rem;
+  text-align: left;
+}
+
+.seo-fallback-breadcrumb,
+.seo-breadcrumb {
+  margin: 0 0 1.25rem;
+  color: #667085;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: left;
+}
+
+.seo-fallback-breadcrumb ol,
+.seo-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-fallback-breadcrumb li,
+.seo-breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.seo-fallback-breadcrumb a,
+.seo-breadcrumb a {
+  color: #344054;
+  text-decoration: none;
+}
+
+.seo-fallback-breadcrumb a:hover,
+.seo-fallback-breadcrumb a:focus-visible,
+.seo-breadcrumb a:hover,
+.seo-breadcrumb a:focus-visible {
+  color: #9e834a;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.seo-fallback-breadcrumb [aria-current="page"],
+.seo-breadcrumb [aria-current="page"] {
+  color: #9e834a;
+}
+
+.seo-breadcrumb-separator { color: #98a2b3; }
+
+.seo-fallback-shell.is-inner .seo-fallback-eyebrow {
+  margin-bottom: 1.25rem;
+  color: #a88035;
+}
+
+.seo-fallback-shell.is-inner .seo-fallback-hero h1 {
+  max-width: none;
+  margin: 0;
+  color: #0b172a;
+  font-size: 2rem;
+}
+
+.seo-fallback-shell.is-inner .seo-fallback-intro {
+  max-width: 820px;
+  margin: 1rem 0 0;
+  color: #536071;
+}
+
+.seo-fallback-hero-image,
+.seo-fallback-hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.seo-fallback-hero-image {
+  z-index: -2;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.seo-fallback-hero-overlay {
+  z-index: -1;
+  background: linear-gradient(to bottom, rgb(11 23 42 / 86%), rgb(11 23 42 / 70%), rgb(11 23 42 / 88%));
+}
+
+.seo-fallback-hero-content {
+  width: min(100% - 2rem, 820px);
+  margin-inline: auto;
+  padding: 5rem 0 4rem;
+  text-align: center;
+}
+
+.seo-fallback-shell.is-home .seo-fallback-hero-content {
+  padding: 8rem 0 2rem;
+}
+
+.seo-fallback-eyebrow {
+  margin: 0 0 1.25rem;
+  color: #c9aa65;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+.seo-fallback-hero h1 {
+  max-width: 800px;
+  margin: 0 auto;
+  color: #fff;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.15rem, 4.2vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.seo-fallback-shell.is-home .seo-fallback-hero h1 {
+  font-size: clamp(1.875rem, 3vw, 2.25rem);
+}
+
+.seo-fallback-intro {
+  max-width: 800px;
+  margin: 1.5rem auto 0;
+  color: rgb(255 255 255 / 82%);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.65;
+}
+
+.seo-fallback-shell.is-home .seo-fallback-intro { font-size: 1rem; }
+
+.seo-fallback-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.seo-fallback-action {
+  min-width: 250px;
+  padding: 0.9rem 1.5rem;
+  border: 1px solid rgb(255 255 255 / 38%);
+  color: #fff;
+}
+
+.seo-fallback-action.primary {
+  border-color: #c5a45e;
+  background: #c5a45e;
+  color: #0b172a;
+}
+
+.seo-fallback-scroll {
+  margin: 3rem 0 0;
+  color: rgb(255 255 255 / 55%);
+  font-size: 0.58rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+/* Keep the interactive hero's decorative scroll cue clear of its CTA row. */
+section.min-h-\[100dvh\] > .absolute.bottom-8.left-1\/2 {
+  bottom: 1rem;
+}
+
+/* Preserve the cue on short laptops while reserving a clear gap below the CTA row. */
+@media (max-height: 720px) {
+  section.min-h-\[100dvh\] > .relative.z-10.w-full {
+    transform: translateY(-1rem);
+  }
+
+  section.min-h-\[100dvh\] > .absolute.bottom-8.left-1\/2 {
+    bottom: 0.5rem;
+  }
+}
+
+.seo-fallback-content {
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+  padding-block: 4rem;
+}
+
+.seo-fallback-content > img {
+  display: block;
+  width: min(100%, 48rem);
+  height: auto;
+  max-height: 32rem;
+  margin: 0 auto 3rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.seo-fallback-content h2 {
+  margin-top: 2.5rem;
+  color: #0b172a;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.65rem, 3vw, 2.3rem);
+  line-height: 1.1;
+}
+
+.seo-fallback-content a,
+.seo-fallback-footer a { color: #345b63; }
+
+.seo-fallback-content li p,
+.seo-fallback-content section > p {
+  color: #536071;
+  line-height: 1.75;
+}
+
+.seo-fallback-content section > ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-fallback-content section > ul > li {
+  padding: 1rem;
+  border: 1px solid #dedbd2;
+  border-radius: 0.4rem;
+  background: #fff;
+}
+
+.seo-fallback-content li p { margin: 0.5rem 0 0; font-size: 0.875rem; }
+.seo-fallback-topics { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+
+.seo-fallback-footer {
+  display: flex;
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid #dedbd2;
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 900px) {
+  .seo-fallback-header-inner { width: min(100% - 2rem, 1400px); }
+  .seo-fallback-header-nav { display: none; }
+  .seo-fallback-mobile-menu { display: block; }
+  .seo-fallback-brand { width: 150px; height: 56px; }
+}
+
+@media (max-width: 720px) {
+  .seo-fallback-shell.is-home .seo-fallback-hero { min-height: calc(100vh - 80px); }
+  .seo-fallback-hero-content { padding-block: 4rem 3rem; }
+  .seo-fallback-shell.is-home .seo-fallback-hero-content { padding: 6rem 0 2rem; }
+  .seo-fallback-shell.is-inner .seo-fallback-hero-content {
+    width: min(100% - 2rem, 1400px);
+    padding-block: 3.5rem;
+  }
+  .seo-fallback-eyebrow { font-size: 0.68rem; letter-spacing: 0.27em; }
+  .seo-fallback-hero h1,
+  .seo-fallback-shell.is-home .seo-fallback-hero h1 { font-size: 1.875rem; }
+  .seo-fallback-intro { font-size: 1rem; line-height: 1.55; }
+  .seo-fallback-actions { flex-direction: column; }
+  .seo-fallback-action { width: 100%; min-width: 0; }
+  .seo-fallback-scroll { margin-top: 2.25rem; }
+  .seo-fallback-content { padding-block: 2.5rem; }
+  .seo-fallback-content section > ul,
+  .seo-fallback-topics { grid-template-columns: 1fr !important; }
+  .seo-fallback-footer { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seo-fallback-shell * { scroll-behavior: auto !important; }
+}
