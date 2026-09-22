@@ -101,7 +101,7 @@ if (insecureDomain.status !== 308 || insecureDomain.headers.get('location') !== 
 }
 
 const homepageHtml = await (await fetch(`${base}/`)).text();
-const analyticsInstalled = /googletagmanager\.com|\bgtag\(|G-[A-Z0-9]+|GTM-[A-Z0-9]+/i.test(homepageHtml);
+const analyticsInstalled = /googletagmanager\.com|\bgtag\(|\bG-[A-Z0-9]{8,}\b|\bGTM-[A-Z0-9]{6,}\b/.test(homepageHtml);
 
 console.log(JSON.stringify({
   auditedOrigin: base,
