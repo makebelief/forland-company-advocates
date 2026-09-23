@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Administrator | Forland & Company Advocates</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="panel" aria-labelledby="admin-title">
+      <a class="brand" href="/" aria-label="Forland & Company Advocates home">
+        <img src="/assets/media/forland-header-logo.png" alt="Forland & Company Advocates" />
+      </a>
+
+      <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+
+      <section id="loading-view" class="view active" aria-label="Checking administrator session">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Checking secure administrator access…</p>
+      </section>
+
+      <section id="login-view" class="view" aria-labelledby="admin-title">
+        <p class="eyebrow">Secure administrator portal</p>
+        <h1 id="admin-title">Administrator sign in</h1>
+        <p class="intro">Use the authorised firm administrator account to continue.</p>
+        <form id="login-form" novalidate>
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="username" inputmode="email" required />
+          <label for="password">Password</label>
+          <div class="password-row">
+            <input id="password" name="password" type="password" autocomplete="current-password" required />
+            <button class="reveal" type="button" data-toggle-password="password">Show</button>
+          </div>
+          <button class="primary" type="submit">Sign in securely</button>
+          <button class="link-button" id="forgot-link" type="button">Forgot password?</button>
+        </form>
+      </section>
+
+      <section id="forgot-view" class="view" aria-labelledby="forgot-title">
+        <p class="eyebrow">Account recovery</p>
+        <h1 id="forgot-title">Reset password</h1>
+        <p class="intro">Enter the authorised administrator email. A secure recovery link will be sent if the account is eligible.</p>
+        <form id="forgot-form" novalidate>
+          <label for="forgot-email">Email address</label>
+          <input id="forgot-email" name="email" type="email" autocomplete="username" inputmode="email" required />
+          <button class="primary" type="submit">Send recovery link</button>
+          <button class="link-button" id="back-to-login" type="button">Back to sign in</button>
+        </form>
+      </section>
+
+      <section id="change-view" class="view" aria-labelledby="change-title">
+        <p class="eyebrow">Security required</p>
+        <h1 id="change-title">Choose a new password</h1>
+        <p class="intro" id="change-copy">For your security, the administrator password must be changed before the portal can be used.</p>
+        <form id="change-form" novalidate>
+          <label for="new-password">New password</label>
+          <div class="password-row">
+            <input id="new-password" name="password" type="password" autocomplete="new-password" required minlength="14" />
+            <button class="reveal" type="button" data-toggle-password="new-password">Show</button>
+          </div>
+          <p class="hint">At least 14 characters, including uppercase, lowercase, a number and a symbol.</p>
+          <label for="confirm-password">Confirm new password</label>
+          <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" required minlength="14" />
+          <button class="primary" type="submit">Update password</button>
+          <button class="link-button" id="change-logout" type="button">Sign out</button>
+        </form>
+      </section>
+
+      <section id="dashboard-view" class="view" aria-labelledby="dashboard-title">
+        <p class="eyebrow">Administrator portal</p>
+        <h1 id="dashboard-title">Opening dashboard</h1>
+        <p class="intro">Your secure administrator dashboard is loading.</p>
+      </section>
+
+      <footer>
+        <span>Forland & Company Advocates</span>
+        <span aria-hidden="true">•</span>
+        <span>Private administration</span>
+      </footer>
+    </section>
+  </main>
+  <script type="module" src="/admin/admin.js"></script>
+</body>
+</html>

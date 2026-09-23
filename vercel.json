@@ -1,54 +1,183 @@
 {
   "rewrites": [
-    { "source": "/about", "destination": "/about/index.html" },
-    { "source": "/practice-areas", "destination": "/practice-areas/index.html" },
-    { "source": "/practice-areas/corporate-commercial", "destination": "/practice-areas/corporate-commercial/index.html" },
-    { "source": "/practice-areas/litigation-dispute", "destination": "/practice-areas/litigation-dispute/index.html" },
-    { "source": "/practice-areas/real-estate", "destination": "/practice-areas/real-estate/index.html" },
-    { "source": "/practice-areas/employment-labour", "destination": "/practice-areas/employment-labour/index.html" },
-    { "source": "/practice-areas/banking-finance", "destination": "/practice-areas/banking-finance/index.html" },
-    { "source": "/practice-areas/technology-data-ip", "destination": "/practice-areas/technology-data-ip/index.html" },
-    { "source": "/practice-areas/immigration-mobility", "destination": "/practice-areas/immigration-mobility/index.html" },
-    { "source": "/practice-areas/estate-planning", "destination": "/practice-areas/estate-planning/index.html" },
-    { "source": "/practice-areas/construction-projects", "destination": "/practice-areas/construction-projects/index.html" },
-    { "source": "/practice-areas/energy-emobility", "destination": "/practice-areas/energy-emobility/index.html" },
-    { "source": "/insights", "destination": "/insights/index.html" },
-    { "source": "/insights/establishing-business", "destination": "/insights/establishing-business/index.html" },
-    { "source": "/insights/commercial-agreement", "destination": "/insights/commercial-agreement/index.html" },
-    { "source": "/insights/emobility-sector", "destination": "/insights/emobility-sector/index.html" },
-    { "source": "/insights/corporate-governance", "destination": "/insights/corporate-governance/index.html" },
-    { "source": "/insights/property-due-diligence", "destination": "/insights/property-due-diligence/index.html" },
-    { "source": "/insights/employment-compliance", "destination": "/insights/employment-compliance/index.html" },
-    { "source": "/our-team", "destination": "/our-team/index.html" },
-    { "source": "/contact", "destination": "/contact/index.html" },
-    { "source": "/privacy-policy", "destination": "/privacy-policy/index.html" },
-    { "source": "/terms-of-use", "destination": "/terms-of-use/index.html" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/dashboard",
+      "destination": "/admin/dashboard.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/practice-areas/:slug",
+      "destination": "/api/cms/page?type=practice&slug=:slug"
+    },
+    {
+      "source": "/practice-areas",
+      "destination": "/practice-areas/index.html"
+    },
+    {
+      "source": "/insights/:slug",
+      "destination": "/api/cms/page?type=insight&slug=:slug"
+    },
+    {
+      "source": "/insights",
+      "destination": "/insights/index.html"
+    },
+    {
+      "source": "/our-team",
+      "destination": "/our-team/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy/index.html"
+    },
+    {
+      "source": "/terms-of-use",
+      "destination": "/terms-of-use/index.html"
+    }
   ],
   "redirects": [
-    { "source": "/index.html", "destination": "/", "permanent": true }
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; media-src 'self'; connect-src 'self' https://formsubmit.co https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.supabase.co https://www.google-analytics.com; media-src 'self'; connect-src 'self' https://*.supabase.co https://formsubmit.co https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com https://maps.google.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+        }
+      ]
+    },
+    {
+      "source": "/admin",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; img-src 'self' data: https://*.supabase.co; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; img-src 'self' data: https://*.supabase.co; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/api/admin/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/404.html",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/cms/page.js": {
+      "includeFiles": "index.html"
+    },
+    "api/sitemap.js": {
+      "includeFiles": "public/sitemap.xml"
+    }
+  }
 }
