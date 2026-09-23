@@ -174,8 +174,18 @@
       if (href.startsWith('tel:')) eventName = 'phone_click';
       else if (href.startsWith('mailto:')) eventName = 'email_click';
       else if (/https?:\/\/(wa\.me|api\.whatsapp\.com)/i.test(href)) eventName = 'whatsapp_click';
-      else if (new URL(href, window.location.href).pathname === '/contact') eventName = 'contact_click';
-      if (eventName) window.gtag('event', eventName, { link_url: href });
+      else {
+        const destination = new URL(href, window.location.href);
+        const label = link.textContent.trim().replace(/\s+/g, ' ');
+        const isConsultationCta = destination.origin === window.location.origin
+          && destination.pathname.replace(/\/+$/, '') === '/contact'
+          && /consult|enquir|talk to|speak to|contact (?:the firm|us)|work with/i.test(label);
+        if (isConsultationCta) eventName = 'consultation_click';
+      }
+
+      // Describe the action without sending URLs, contact details, message
+      // content or other form values to Google Analytics.
+      if (eventName) window.gtag('event', eventName);
     });
 
     document.addEventListener('submit', (event) => {

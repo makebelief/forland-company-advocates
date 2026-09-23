@@ -1,5 +1,6 @@
 (() => {
   const labels = {"/":"Law Firm in Nairobi, Kenya","/about":"About the Firm","/practice-areas":"Practice Areas","/practice-areas/corporate-commercial":"Corporate & Commercial","/practice-areas/litigation-dispute":"Litigation & Dispute Resolution","/practice-areas/real-estate":"Real Estate & Conveyancing","/practice-areas/employment-labour":"Employment & Labour","/practice-areas/banking-finance":"Banking & Finance","/practice-areas/technology-data-ip":"Technology, Data & IP","/practice-areas/immigration-mobility":"Immigration & Business Mobility","/practice-areas/estate-planning":"Succession & Estate Planning","/practice-areas/construction-projects":"Construction & Infrastructure","/practice-areas/energy-emobility":"Energy & E-Mobility","/insights":"Legal Insights","/insights/establishing-business":"Corporate Law Guide","/insights/commercial-agreement":"Commercial Law Guide","/insights/emobility-sector":"Energy & E-Mobility Guide","/insights/corporate-governance":"Corporate Governance Guide","/insights/property-due-diligence":"Real Estate Guide","/insights/employment-compliance":"Employment Law Guide","/our-team":"Our Legal Team","/contact":"Contact","/privacy-policy":"Privacy Policy","/terms-of-use":"Terms of Use"};
+  const relatedPractices = {"/insights/establishing-business":"/practice-areas/corporate-commercial","/insights/commercial-agreement":"/practice-areas/corporate-commercial","/insights/emobility-sector":"/practice-areas/energy-emobility","/insights/corporate-governance":"/practice-areas/corporate-commercial","/insights/property-due-diligence":"/practice-areas/real-estate","/insights/employment-compliance":"/practice-areas/employment-labour"};
   const root = document.getElementById('root');
   if (!root) return;
   const normalize = () => window.location.pathname.replace(/\/+$/, '') || '/';
@@ -10,8 +11,34 @@
     trail.push({ href: path, label: labels[path] });
     return trail;
   };
+  const applyRelatedPractice = (path) => {
+    const existing = root.querySelector('.seo-related-practice');
+    const relatedPath = relatedPractices[path];
+    if (!relatedPath) { existing?.remove(); return; }
+    if (existing?.dataset.path === path) return;
+    existing?.remove();
+    const container = root.querySelector('main article > div');
+    if (!container) return;
+    const aside = document.createElement('aside');
+    aside.className = 'seo-related-practice';
+    aside.dataset.path = path;
+    aside.setAttribute('aria-labelledby', 'related-practice-heading');
+    const heading = document.createElement('h2');
+    heading.id = 'related-practice-heading';
+    heading.textContent = 'Related legal service';
+    const copy = document.createElement('p');
+    copy.append('Learn more about ');
+    const link = document.createElement('a');
+    link.href = relatedPath;
+    link.textContent = labels[relatedPath];
+    copy.append(link, '.');
+    aside.append(heading, copy);
+    const actions = container.lastElementChild;
+    container.insertBefore(aside, actions);
+  };
   const apply = () => {
     const path = normalize();
+    applyRelatedPractice(path);
     const existing = root.querySelector('.seo-breadcrumb');
     if (path === '/' || !labels[path]) { existing?.remove(); return; }
     if (existing?.dataset.path === path) return;

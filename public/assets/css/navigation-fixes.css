@@ -12,3 +12,21 @@
     width: min(360px, calc(100vw - 32px));
   }
 }
+
+.seo-related-practice {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #dedbd2;
+  border-radius: 0.5rem;
+  background: #f4f1e9;
+}
+
+.seo-related-practice h2 {
+  margin: 0;
+  color: #0b172a;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.seo-related-practice p { margin: 0.5rem 0 0; color: #536071; }
+.seo-related-practice a { color: #345b63; font-weight: 700; text-underline-offset: 0.18em; }

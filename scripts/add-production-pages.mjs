@@ -76,9 +76,17 @@ bundle = bundle
   .replaceAll('[PHONE NUMBER]', 'Available on request')
   .replaceAll('[EMAIL ADDRESS]', 'Use the secure inquiry form')
   .replaceAll('[OFFICE HOURS]', 'Monday–Friday, by appointment')
-  .replace('a.forEach((e,t)=>{t===`website_alt`', 'o.append(`form-name`,`contact`),a.forEach((e,t)=>{t===`website_alt`')
   .replace('e.ok&&a?.code===`OK`?', 'e.ok?')
   .replace('var xs=`/api/contact`', 'var xs=`/`');
+
+const contactFormMarker = 'o.append(`form-name`,`contact`),';
+const contactFieldsStart = 'a.forEach((e,t)=>{t===`website_alt`';
+while (bundle.includes(contactFormMarker + contactFormMarker)) {
+  bundle = bundle.replaceAll(contactFormMarker + contactFormMarker, contactFormMarker);
+}
+if (!bundle.includes(contactFormMarker + contactFieldsStart)) {
+  bundle = bundle.replace(contactFieldsStart, contactFormMarker + contactFieldsStart);
+}
 
 const teamStart = bundle.indexOf('function bs(){return');
 const teamEnd = bundle.indexOf('var xs=`/`;', teamStart);

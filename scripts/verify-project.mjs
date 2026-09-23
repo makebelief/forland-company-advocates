@@ -53,6 +53,15 @@ const analyticsConsent = await readFile('public/assets/js/analytics-consent.js',
 if (!analyticsConsent.includes("analytics_storage: 'denied'")) throw new Error('GA4 must default analytics consent to denied.');
 if (!analyticsConsent.includes("ad_storage: 'denied'")) throw new Error('GA4 advertising storage must remain disabled.');
 if (!analyticsConsent.includes('https://www.googletagmanager.com/gtag/js')) throw new Error('The GA4 loader endpoint is missing.');
+for (const eventName of ['page_view', 'phone_click', 'whatsapp_click', 'email_click', 'generate_lead', 'consultation_click']) {
+  if (!analyticsConsent.includes(`'${eventName}'`)) throw new Error(`GA4 event is missing: ${eventName}`);
+}
+if (analyticsConsent.includes('link_url: href')) throw new Error('GA4 click events must not transmit contact URLs.');
+if (analyticsConsent.includes("'contact_click'")) throw new Error('Legacy contact_click should use consultation_click.');
+if ((index.match(/data-measurement-id="G-084LNP4DC1"/g) || []).length !== 1) {
+  throw new Error('The document must contain exactly one GA4 loader configuration.');
+}
+if (/src=["']https:\/\/www\.googletagmanager\.com\/gtag\/js/i.test(index)) throw new Error('A duplicate direct Google tag is installed.');
 
 const bundle = await readFile('public/assets/js/site.min.js', 'utf8');
 const requiredMarkers = [
@@ -76,6 +85,9 @@ const forbiddenProductionMarkers = [
 for (const marker of requiredMarkers) {
   if (!bundle.includes(marker)) throw new Error(`Application bundle is missing: ${marker}`);
 }
+if ((bundle.split('o.append(`form-name`,`contact`),').length - 1) !== 1) {
+  throw new Error('The contact request must include exactly one form-name field.');
+}
 if ((bundle.match(/loading:`lazy`/g) || []).length !== 13) {
   throw new Error('All 13 content images should use native lazy loading.');
 }
@@ -92,11 +104,21 @@ for (const marker of forbiddenProductionMarkers) {
   if (bundle.includes(marker)) throw new Error(`Application bundle contains production blocker: ${marker}`);
 }
 
+const pageList = Object.values(pages);
+if (new Set(pageList.map((page) => page.title)).size !== pageList.length) throw new Error('SEO titles must be unique.');
+if (new Set(pageList.map((page) => page.description)).size !== pageList.length) {
+  throw new Error('Meta descriptions must be unique.');
+}
+
 for (const [path, page] of Object.entries(pages)) {
   if (page.title.length < 30 || page.title.length > 70) throw new Error(`SEO title length is unsuitable for ${path}: ${page.title.length}`);
   if (page.description.length < 110 || page.description.length > 170) throw new Error(`Meta description length is unsuitable for ${path}: ${page.description.length}`);
   if (!page.h1 || !page.image?.src || !page.image?.alt) throw new Error(`SEO content is incomplete for ${path}.`);
   await access(`public${page.image.src}`);
+  if (page.type === 'article' && !page.relatedPracticePath) throw new Error(`Insight is missing a related practice link: ${path}`);
+  if (page.relatedPracticePath && !pages[page.relatedPracticePath]) {
+    throw new Error(`Related practice route does not exist for ${path}: ${page.relatedPracticePath}`);
+  }
 }
 
 const sitemap = await readFile('public/sitemap.xml', 'utf8');
@@ -127,11 +149,30 @@ if (verifyDist) {
     const file = path === '/' ? 'dist/index.html' : `dist${path}/index.html`;
     const html = await readFile(file, 'utf8');
     const url = site.origin + (path === '/' ? '/' : path);
+    const escapedTitle = page.title.replaceAll('&', '&amp;');
+    const escapedDescription = page.description.replaceAll('&', '&amp;');
     if (!html.includes(`<link rel="canonical" href="${url}"`)) throw new Error(`${file} has the wrong canonical URL.`);
     if (!html.includes(`>${page.h1.replaceAll('&', '&amp;')}</h1>`)) throw new Error(`${file} is missing its pre-rendered H1.`);
     if (!html.includes('class="seo-fallback-hero"')) throw new Error(`${file} is missing the branded loading hero.`);
     if (html.includes('<div id="root"></div>')) throw new Error(`${file} has an empty application shell.`);
     if (!html.includes(`${site.origin}${page.image.src}`)) throw new Error(`${file} is missing its route-specific social image.`);
+    if ((html.match(/<h1\b/gi) || []).length !== 1) throw new Error(`${file} must contain exactly one H1.`);
+    if (!/name="robots" content="index, follow/.test(html)) throw new Error(`${file} is accidentally non-indexable.`);
+    const socialMarkers = [
+      `property="og:title" content="${escapedTitle}"`,
+      `property="og:description" content="${escapedDescription}"`,
+      `property="og:url" content="${url}"`,
+      `name="twitter:title" content="${escapedTitle}"`,
+      `name="twitter:description" content="${escapedDescription}"`,
+      'name="twitter:card" content="summary_large_image"',
+    ];
+    for (const marker of socialMarkers) {
+      if (!html.includes(marker)) throw new Error(`${file} has incomplete social metadata: ${marker}`);
+    }
+    if ((html.match(/type="application\/ld\+json"/g) || []).length !== 1) throw new Error(`${file} must contain exactly one JSON-LD graph.`);
+    if (page.relatedPracticePath && !html.includes(`href="${page.relatedPracticePath}"`)) {
+      throw new Error(`${file} is missing its related practice-area link.`);
+    }
     const match = html.match(/<script id="structured-data" type="application\/ld\+json">(.*?)<\/script>/s);
     if (!match) throw new Error(`${file} is missing JSON-LD.`);
     const schema = JSON.parse(match[1]);
@@ -146,6 +187,9 @@ if (verifyDist) {
     }
     if (path !== '/' && !schemaTypes.includes('BreadcrumbList')) {
       throw new Error(`${file} is missing BreadcrumbList schema.`);
+    }
+    if (page.type === 'article' && !schemaTypes.includes('Article')) {
+      throw new Error(`${file} is missing Article schema.`);
     }
     if (path !== '/' && !html.includes('class="seo-fallback-breadcrumb"')) {
       throw new Error(`${file} is missing crawlable breadcrumb navigation.`);

@@ -70,6 +70,9 @@ const fallbackHtml = (path, page) => {
     discovery += `<section aria-labelledby="related-links"><h2 id="related-links">Related legal services</h2>${listLinks(practicePaths.filter((itemPath) => itemPath !== path).slice(0, 5))}</section>`;
   }
   if (path.startsWith('/insights/')) {
+    if (page.relatedPracticePath) {
+      discovery += `<section aria-labelledby="related-practice"><h2 id="related-practice">Related legal service</h2>${listLinks([page.relatedPracticePath])}</section>`;
+    }
     discovery += `<section aria-labelledby="related-links"><h2 id="related-links">More Kenyan legal insights</h2>${listLinks(insightPaths.filter((itemPath) => itemPath !== path).slice(0, 5))}</section>`;
   }
 

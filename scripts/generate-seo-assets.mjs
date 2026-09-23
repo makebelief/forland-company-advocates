@@ -10,6 +10,10 @@ const breadcrumbLabels = Object.fromEntries(
   Object.entries(pages).map(([path, page]) => [path, page.breadcrumbLabel]),
 );
 const breadcrumbJson = JSON.stringify(breadcrumbLabels).replaceAll('<', '\\u003c');
+const relatedPracticeLinks = Object.fromEntries(
+  Object.entries(pages).filter(([, page]) => page.relatedPracticePath).map(([path, page]) => [path, page.relatedPracticePath]),
+);
+const relatedPracticeJson = JSON.stringify(relatedPracticeLinks).replaceAll('<', '\\u003c');
 const runtime = `(() => {
   const data = ${json};
   const upsertMeta = (selector, attributes) => {
@@ -89,6 +93,7 @@ const runtime = `(() => {
 
 const breadcrumbRuntime = `(() => {
   const labels = ${breadcrumbJson};
+  const relatedPractices = ${relatedPracticeJson};
   const root = document.getElementById('root');
   if (!root) return;
   const normalize = () => window.location.pathname.replace(/\\/+$/, '') || '/';
@@ -99,8 +104,34 @@ const breadcrumbRuntime = `(() => {
     trail.push({ href: path, label: labels[path] });
     return trail;
   };
+  const applyRelatedPractice = (path) => {
+    const existing = root.querySelector('.seo-related-practice');
+    const relatedPath = relatedPractices[path];
+    if (!relatedPath) { existing?.remove(); return; }
+    if (existing?.dataset.path === path) return;
+    existing?.remove();
+    const container = root.querySelector('main article > div');
+    if (!container) return;
+    const aside = document.createElement('aside');
+    aside.className = 'seo-related-practice';
+    aside.dataset.path = path;
+    aside.setAttribute('aria-labelledby', 'related-practice-heading');
+    const heading = document.createElement('h2');
+    heading.id = 'related-practice-heading';
+    heading.textContent = 'Related legal service';
+    const copy = document.createElement('p');
+    copy.append('Learn more about ');
+    const link = document.createElement('a');
+    link.href = relatedPath;
+    link.textContent = labels[relatedPath];
+    copy.append(link, '.');
+    aside.append(heading, copy);
+    const actions = container.lastElementChild;
+    container.insertBefore(aside, actions);
+  };
   const apply = () => {
     const path = normalize();
+    applyRelatedPractice(path);
     const existing = root.querySelector('.seo-breadcrumb');
     if (path === '/' || !labels[path]) { existing?.remove(); return; }
     if (existing?.dataset.path === path) return;
