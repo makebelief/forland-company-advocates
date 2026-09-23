@@ -7,7 +7,9 @@ const requiredFiles = [
   'public/assets/css/site.min.css',
   'public/assets/css/seo-fallback.css',
   'public/assets/css/fonts.css',
+  'public/assets/css/analytics-consent.css',
   'public/assets/js/site.min.js',
+  'public/assets/js/analytics-consent.js',
   'public/assets/js/route-meta.js',
   'public/assets/js/seo-navigation.js',
   'public/assets/js/wording-updates.js',
@@ -44,6 +46,13 @@ if (!index.includes('<html lang="en-KE">')) throw new Error('The document langua
 if (!index.includes('favicon-32x32.png')) throw new Error('A PNG search-result favicon is required.');
 if (index.includes('fonts.googleapis.com')) throw new Error('Production HTML should use the local font assets.');
 if (index.includes('fontawesome.min.css')) throw new Error('Unused Font Awesome CSS must not block rendering.');
+if (!index.includes('data-measurement-id="G-084LNP4DC1"')) throw new Error('The GA4 measurement ID is missing from the document.');
+if (!index.includes('/assets/js/analytics-consent.js')) throw new Error('The consent-aware Analytics loader is missing.');
+
+const analyticsConsent = await readFile('public/assets/js/analytics-consent.js', 'utf8');
+if (!analyticsConsent.includes("analytics_storage: 'denied'")) throw new Error('GA4 must default analytics consent to denied.');
+if (!analyticsConsent.includes("ad_storage: 'denied'")) throw new Error('GA4 advertising storage must remain disabled.');
+if (!analyticsConsent.includes('https://www.googletagmanager.com/gtag/js')) throw new Error('The GA4 loader endpoint is missing.');
 
 const bundle = await readFile('public/assets/js/site.min.js', 'utf8');
 const requiredMarkers = [
