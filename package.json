@@ -7,7 +7,7 @@
     "dev": "vite",
     "optimize:media": "node scripts/generate-webp-assets.mjs",
     "optimize:runtime": "node scripts/optimize-runtime-assets.mjs",
-    "build": "node scripts/optimize-runtime-assets.mjs && node scripts/generate-seo-assets.mjs && node --check public/assets/js/route-meta.js && vite build && node scripts/generate-seo-pages.mjs && node scripts/create-spa-fallback.mjs && node scripts/verify-project.mjs --dist && node scripts/verify-cms.mjs --dist",
+    "build": "node scripts/optimize-runtime-assets.mjs && node scripts/generate-seo-assets.mjs && node --check public/assets/js/route-meta.js && vite build && node scripts/generate-seo-pages.mjs && node scripts/create-spa-fallback.mjs && node scripts/verify-project.mjs --dist && node scripts/verify-cms.mjs --dist && node scripts/remove-cms-detail-output.mjs",
     "preview": "vite preview",
     "check": "node scripts/optimize-runtime-assets.mjs && node scripts/generate-seo-assets.mjs && node --check public/assets/js/route-meta.js && node --check public/assets/js/site.min.js && node scripts/verify-project.mjs && node scripts/verify-cms.mjs",
     "audit:live": "node scripts/audit-live-seo.mjs",
