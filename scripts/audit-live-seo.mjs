@@ -40,6 +40,7 @@ for (const [path, page] of Object.entries(pages)) {
   const h1Count = (html.match(/<h1\b/gi) || []).length;
   const missingAltCount = (html.match(/<img\b(?![^>]*\balt=)[^>]*>/gi) || []).length;
   const schemaText = html.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>(.*?)<\/script>/is)?.[1];
+  const isCmsDetail = /^\/(?:practice-areas|insights)\/[^/]+$/.test(path);
   let schemaTypes = [];
   try {
     const schema = JSON.parse(schemaText);
@@ -51,15 +52,17 @@ for (const [path, page] of Object.entries(pages)) {
   }
 
   if (response.status !== 200) addFailure(path, `expected 200, received ${response.status}`);
-  if (title !== page.title) addFailure(path, 'title does not match the route registry');
-  if (description !== page.description) addFailure(path, 'meta description does not match the route registry');
+  if (!title) addFailure(path, 'title is missing');
+  else if (!isCmsDetail && title !== page.title) addFailure(path, 'title does not match the route registry');
+  if (!description) addFailure(path, 'meta description is missing');
+  else if (!isCmsDetail && description !== page.description) addFailure(path, 'meta description does not match the route registry');
   if (canonical !== `${site.origin}${path === '/' ? '/' : path}`) addFailure(path, 'canonical URL is incorrect');
   if (seenTitles.has(title)) addFailure(path, `duplicates the title used by ${seenTitles.get(title)}`);
   else seenTitles.set(title, path);
   if (seenDescriptions.has(description)) addFailure(path, `duplicates the description used by ${seenDescriptions.get(description)}`);
   else seenDescriptions.set(description, path);
-  if (ogTitle !== page.title || twitterTitle !== page.title) addFailure(path, 'social title metadata is incorrect');
-  if (ogDescription !== page.description || twitterDescription !== page.description) addFailure(path, 'social description metadata is incorrect');
+  if (ogTitle !== title || twitterTitle !== title) addFailure(path, 'social title metadata is incorrect');
+  if (ogDescription !== description || twitterDescription !== description) addFailure(path, 'social description metadata is incorrect');
   if (ogUrl !== `${site.origin}${path === '/' ? '/' : path}`) addFailure(path, 'Open Graph URL is incorrect');
   if (schemaCount !== 1) addFailure(path, `expected one JSON-LD graph, found ${schemaCount}`);
   if (page.relatedPracticePath && !html.includes(`href="${page.relatedPracticePath}"`)) addFailure(path, 'related practice link is missing');

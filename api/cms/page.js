@@ -8,6 +8,14 @@ const builtIn = {
   practice: new Set(['corporate-commercial', 'litigation-dispute', 'real-estate', 'employment-labour', 'banking-finance', 'technology-data-ip', 'immigration-mobility', 'estate-planning', 'construction-projects', 'energy-emobility']),
   insight: new Set(['establishing-business', 'commercial-agreement', 'emobility-sector', 'corporate-governance', 'property-due-diligence', 'employment-compliance']),
 };
+const insightPracticePaths = {
+  'establishing-business': '/practice-areas/corporate-commercial',
+  'commercial-agreement': '/practice-areas/corporate-commercial',
+  'emobility-sector': '/practice-areas/energy-emobility',
+  'corporate-governance': '/practice-areas/corporate-commercial',
+  'property-due-diligence': '/practice-areas/real-estate',
+  'employment-compliance': '/practice-areas/employment-labour',
+};
 const notFound = '<!doctype html><html lang="en-KE"><title>Page not found</title><meta name="robots" content="noindex, follow"><body><h1>Page not found</h1><p><a href="/">Return home</a></p></body></html>';
 const escapeHtml = (value) => String(value || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 
@@ -47,6 +55,10 @@ async function render(record, type) {
   const safeDescription = escapeHtml(description);
   const safeCanonical = escapeHtml(canonical);
   const safeImage = escapeHtml(image);
+  const relatedPracticePath = type === 'insight' ? insightPracticePaths[record.slug] : '';
+  const relatedPracticeLink = relatedPracticePath
+    ? '<p class="seo-related-link">Related legal service: <a href="' + relatedPracticePath + '">view the relevant practice area</a>.</p>'
+    : '';
   const replacements = [
     [/<title>.*?<\/title>/s, '<title>' + safeTitle + '</title>'],
     [/<meta name="description"[^>]*>/, '<meta name="description" content="' + safeDescription + '" />'],
@@ -63,7 +75,7 @@ async function render(record, type) {
   ];
   for (const [pattern, tag] of replacements) html = html.replace(pattern, tag);
   html = html.replace('</head>', '    <script id="structured-data" type="application/ld+json">' + schema(record, type, canonical, image) + '</script>\n  </head>');
-  html = html.replace('<div id="root"></div>', '<div id="root"><main class="seo-fallback-main" id="main-content"><article><h1>' + escapeHtml(record.title) + '</h1><p>' + safeDescription + '</p></article></main></div>');
+  html = html.replace('<div id="root"></div>', '<div id="root"><main class="seo-fallback-main" id="main-content"><article><h1>' + escapeHtml(record.title) + '</h1><p>' + safeDescription + '</p>' + relatedPracticeLink + '</article></main></div>');
   return html;
 }
 

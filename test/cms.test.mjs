@@ -163,6 +163,29 @@ test('dynamic routes return 404 when a record is unpublished or missing', async 
   assert.match(res.headers.get('x-robots-tag'), /noindex/);
 });
 
+test('published insight HTML includes CMS metadata and its related practice link', async () => {
+  global.fetch = async (url) => {
+    if (String(url).includes('/cms_insights?')) return new Response(JSON.stringify([{
+      slug: 'employment-compliance',
+      title: 'Employment Compliance: What Employers Need to Know',
+      seo_title: 'Employment Compliance Guide | Forland Advocates',
+      meta_description: 'A practical employment compliance guide for Kenyan employers.',
+      excerpt: 'Employment guidance.',
+      is_published: true,
+      created_at: '2026-09-01T00:00:00Z',
+      updated_at: '2026-09-02T00:00:00Z',
+      published_at: '2026-09-01T00:00:00Z',
+    }]), { status: 200 });
+    return new Response('[]', { status: 200 });
+  };
+  const res = response();
+  await pageHandler(request('GET', { url: '/api/cms/page?type=insight&slug=employment-compliance' }), res);
+  assert.equal(res.statusCode, 200);
+  assert.match(res.body, /<title>Employment Compliance Guide \| Forland Advocates<\/title>/);
+  assert.match(res.body, /href="\/practice-areas\/employment-labour"/);
+  assert.equal((res.body.match(/<h1\b/g) || []).length, 1);
+});
+
 test('media rejects extension and signature mismatches after authentication', async () => {
   global.fetch = authenticatedFetch();
   const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).toString('base64');
