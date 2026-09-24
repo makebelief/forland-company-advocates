@@ -31,11 +31,15 @@ if ((index.match(/cms-runtime\.css/g) || []).length !== 1) throw new Error('CMS 
 
 const admin = await readFile('public/admin/index.html', 'utf8');
 const dashboard = await readFile('public/admin/dashboard.html', 'utf8');
+const dashboardScript = await readFile('public/admin/dashboard.js', 'utf8');
 for (const html of [admin, dashboard]) {
   if (!/name="robots" content="noindex, nofollow, noarchive"/.test(html)) throw new Error('Admin HTML must be noindex/nofollow.');
 }
 for (const label of ['Overview', 'Pages', 'Practice Areas', 'Team', 'Insights', 'Media', 'Site Settings', 'SEO', 'Audit Log', 'Security', 'Open live website', 'Sign out']) {
   if (!dashboard.includes(label)) throw new Error('Dashboard navigation is missing: ' + label);
+}
+for (const marker of ["const SITE_ORIGIN = 'https://forlandcompanyadvocates.co.ke'", 'Copy article link', 'View article', "resource==='insights'"]) {
+  if (!dashboardScript.includes(marker)) throw new Error('Published insight sharing control is missing: ' + marker);
 }
 
 const frontendFiles = [
