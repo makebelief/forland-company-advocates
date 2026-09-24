@@ -135,6 +135,20 @@ test('unknown input fields are discarded and drafts stay unpublished', () => {
   assert.equal(record.is_published, false);
   assert.equal('unexpected_admin' in record, false);
   assert.equal(record.body, '<script>alert(1)</script>');
+  assert.equal(record.featured_image_alt, 'Safe article');
+  assert.equal(record.seo_title, 'Safe article | Forland & Company Advocates');
+  assert.equal(record.meta_description, '<script>alert(1)</script>');
+});
+
+test('article slugs and search metadata are generated and related practices are validated', () => {
+  const record = sanitizeResource('insights', {
+    title: 'A Guide to Kenyan Employment Law',
+    excerpt: 'A practical guide for employers in Kenya.',
+    related_practice_area_id: '858d82a7-2835-41a1-a9a8-8d8b932540a6',
+  }, '858d82a7-2835-41a1-a9a8-8d8b932540a6');
+  assert.equal(record.slug, 'a-guide-to-kenyan-employment-law');
+  assert.equal(record.meta_description, 'A practical guide for employers in Kenya.');
+  assert.throws(() => sanitizeResource('insights', { title: 'Bad relation', related_practice_area_id: 'not-an-id' }, 'user'), /Invalid record ID/);
 });
 
 test('settings reject oversized values and unknown groups', () => {
@@ -171,6 +185,7 @@ test('published insight HTML includes CMS metadata and its related practice link
       seo_title: 'Employment Compliance Guide | Forland Advocates',
       meta_description: 'A practical employment compliance guide for Kenyan employers.',
       excerpt: 'Employment guidance.',
+      body: '## Employer checklist\n- Keep **written records**\n<script>alert(1)</script>',
       is_published: true,
       created_at: '2026-09-01T00:00:00Z',
       updated_at: '2026-09-02T00:00:00Z',
@@ -183,6 +198,10 @@ test('published insight HTML includes CMS metadata and its related practice link
   assert.equal(res.statusCode, 200);
   assert.match(res.body, /<title>Employment Compliance Guide \| Forland Advocates<\/title>/);
   assert.match(res.body, /href="\/practice-areas\/employment-labour"/);
+  assert.match(res.body, /<h2>Employer checklist<\/h2>/);
+  assert.match(res.body, /<strong>written records<\/strong>/);
+  assert.doesNotMatch(res.body, /<script>alert\(1\)<\/script>/);
+  assert.match(res.body, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
   assert.equal((res.body.match(/<h1\b/g) || []).length, 1);
 });
 

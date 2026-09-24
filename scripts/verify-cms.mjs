@@ -22,6 +22,7 @@ const required = [
   'public/assets/js/cms-runtime.js',
   'public/assets/css/cms-runtime.css',
   'supabase/migrations/20260923193000_cms_schema.sql',
+  'supabase/migrations/20260924070000_editorial_workflow.sql',
 ];
 await Promise.all(required.map((file) => access(file)));
 
@@ -35,11 +36,14 @@ const dashboardScript = await readFile('public/admin/dashboard.js', 'utf8');
 for (const html of [admin, dashboard]) {
   if (!/name="robots" content="noindex, nofollow, noarchive"/.test(html)) throw new Error('Admin HTML must be noindex/nofollow.');
 }
-for (const label of ['Overview', 'Pages', 'Practice Areas', 'Team', 'Insights', 'Media', 'Site Settings', 'SEO', 'Audit Log', 'Security', 'Open live website', 'Sign out']) {
+for (const label of ['Insights', 'Team Members', 'Practice Areas', 'Contact Details', 'View Website', 'Log Out']) {
   if (!dashboard.includes(label)) throw new Error('Dashboard navigation is missing: ' + label);
 }
 for (const marker of ["const SITE_ORIGIN = 'https://forlandcompanyadvocates.co.ke'", 'Copy article link', 'View article', "resource==='insights'"]) {
   if (!dashboardScript.includes(marker)) throw new Error('Published insight sharing control is missing: ' + marker);
+}
+for (const marker of ['Save Draft', 'Preview', 'Publish', 'Unpublish', 'Restore Previous Version', 'featured_image_alt', 'related_practice_area_id', 'formattedMarkup']) {
+  if (!dashboard.includes(marker) && !dashboardScript.includes(marker)) throw new Error('Editorial workflow marker is missing: ' + marker);
 }
 
 const frontendFiles = [
@@ -92,6 +96,10 @@ for (const table of ['admin_security', 'cms_pages', 'cms_practice_areas', 'cms_t
   if (!migration.includes('alter table public.' + table + ' enable row level security')) throw new Error('Migration is missing RLS for ' + table);
 }
 if (!migration.includes('revoke all on table') || !migration.includes('from anon, authenticated')) throw new Error('Migration must revoke browser-role table privileges.');
+const editorialMigration = await readFile('supabase/migrations/20260924070000_editorial_workflow.sql', 'utf8');
+for (const marker of ['featured_image_alt', 'related_practice_area_id', 'create table if not exists public.cms_revisions', 'alter table public.cms_revisions enable row level security', 'revoke all on table public.cms_revisions from anon, authenticated']) {
+  if (!editorialMigration.includes(marker)) throw new Error('Editorial migration marker is missing: ' + marker);
+}
 
 if (verifyDist) {
   for (const file of ['dist/admin/index.html', 'dist/admin/dashboard.html', 'dist/assets/js/cms-runtime.js', 'dist/assets/css/cms-runtime.css']) await access(file);

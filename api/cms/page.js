@@ -18,10 +18,43 @@ const insightPracticePaths = {
 };
 const notFound = '<!doctype html><html lang="en-KE"><title>Page not found</title><meta name="robots" content="noindex, follow"><body><h1>Page not found</h1><p><a href="/">Return home</a></p></body></html>';
 const escapeHtml = (value) => String(value || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+const inlineMarkup = (value) => escapeHtml(value)
+  .replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+|\/[^)\s]+)\)/g, '<a href="$2">$1</a>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  .replace(/_([^_]+)_/g, '<em>$1</em>');
 
-function schema(record, type, canonical, image) {
+function formatMarkdown(value) {
+  const output = [];
+  let list = '';
+  const closeList = () => { if (list) output.push(`</${list}>`); list = ''; };
+  for (const raw of String(value || '').split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) { closeList(); continue; }
+    const heading = line.match(/^(#{2,3})\s+(.+)$/);
+    if (heading) { closeList(); const level = heading[1].length; output.push(`<h${level}>${inlineMarkup(heading[2])}</h${level}>`); continue; }
+    const bullet = line.match(/^[-*]\s+(.+)$/);
+    const numbered = line.match(/^\d+[.)]\s+(.+)$/);
+    if (bullet || numbered) {
+      const next = bullet ? 'ul' : 'ol';
+      if (list !== next) { closeList(); list = next; output.push(`<${list}>`); }
+      output.push(`<li>${inlineMarkup((bullet || numbered)[1])}</li>`);
+      continue;
+    }
+    closeList();
+    output.push(`<p>${inlineMarkup(line)}</p>`);
+  }
+  closeList();
+  return output.join('');
+}
+
+function schema(record, type, canonical, image, site = {}) {
+  const organization = { '@type': ['LegalService', 'Organization'], '@id': ORIGIN + '/#organization', name: site.firm_name || 'Forland & Company Advocates', url: ORIGIN + '/' };
+  if (site.phone) organization.telephone = site.phone;
+  if (site.email) organization.email = site.email;
+  if (site.office_address) organization.address = { '@type': 'PostalAddress', streetAddress: site.office_address, addressLocality: site.location || 'Nairobi', addressCountry: 'KE' };
+  if (site.office_hours) organization.openingHours = site.office_hours;
   const graph = [
-    { '@type': ['LegalService', 'Organization'], '@id': ORIGIN + '/#organization', name: 'Forland & Company Advocates', url: ORIGIN + '/' },
+    organization,
     { '@type': 'WebSite', '@id': ORIGIN + '/#website', url: ORIGIN + '/', name: 'Forland & Company Advocates', publisher: { '@id': ORIGIN + '/#organization' } },
     { '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: ORIGIN + '/' },
@@ -43,7 +76,7 @@ function schema(record, type, canonical, image) {
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replaceAll('<', '\\u003c');
 }
 
-async function render(record, type) {
+async function render(record, type, relatedPractice = null, site = {}) {
   let html = await templatePromise;
   const prefix = type === 'insight' ? 'insights' : 'practice-areas';
   const canonical = ORIGIN + '/' + prefix + '/' + record.slug;
@@ -55,10 +88,11 @@ async function render(record, type) {
   const safeDescription = escapeHtml(description);
   const safeCanonical = escapeHtml(canonical);
   const safeImage = escapeHtml(image);
-  const relatedPracticePath = type === 'insight' ? insightPracticePaths[record.slug] : '';
+  const relatedPracticePath = type === 'insight' ? relatedPractice ? `/practice-areas/${relatedPractice.slug}` : insightPracticePaths[record.slug] : '';
   const relatedPracticeLink = relatedPracticePath
-    ? '<p class="seo-related-link">Related legal service: <a href="' + relatedPracticePath + '">view the relevant practice area</a>.</p>'
+    ? '<p class="seo-related-link">Related legal service: <a href="' + relatedPracticePath + '">' + escapeHtml(relatedPractice?.title || 'View the relevant practice area') + '</a>.</p>'
     : '';
+  const articleBody = type === 'insight' ? formatMarkdown(record.body || record.excerpt) : '<p>' + escapeHtml(record.body || record.summary || '') + '</p>';
   const replacements = [
     [/<title>.*?<\/title>/s, '<title>' + safeTitle + '</title>'],
     [/<meta name="description"[^>]*>/, '<meta name="description" content="' + safeDescription + '" />'],
@@ -74,8 +108,8 @@ async function render(record, type) {
     [/<meta name="twitter:image"[^>]*>/, '<meta name="twitter:image" content="' + safeImage + '" />'],
   ];
   for (const [pattern, tag] of replacements) html = html.replace(pattern, tag);
-  html = html.replace('</head>', '    <script id="structured-data" type="application/ld+json">' + schema(record, type, canonical, image) + '</script>\n  </head>');
-  html = html.replace('<div id="root"></div>', '<div id="root"><main class="seo-fallback-main" id="main-content"><article><h1>' + escapeHtml(record.title) + '</h1><p>' + safeDescription + '</p>' + relatedPracticeLink + '</article></main></div>');
+  html = html.replace('</head>', '    <script id="structured-data" type="application/ld+json">' + schema(record, type, canonical, image, site) + '</script>\n  </head>');
+  html = html.replace('<div id="root"></div>', '<div id="root"><main class="seo-fallback-main" id="main-content"><article><h1>' + escapeHtml(record.title) + '</h1>' + articleBody + relatedPracticeLink + '</article></main></div>');
   return html;
 }
 
@@ -98,7 +132,10 @@ export default async function handler(req, res) {
     const data = await snapshot({ publicOnly: true });
     const record = (type === 'practice' ? data.practiceAreas : data.insights).find((item) => item.slug === slug && item.is_published !== false);
     if (!record) return send(res, 404, notFound);
-    return send(res, 200, await render(record, type), 'public, s-maxage=60, stale-while-revalidate=300');
+    const relatedPractice = type === 'insight' && record.related_practice_area_id
+      ? data.practiceAreas.find((item) => item.id === record.related_practice_area_id && item.is_published !== false)
+      : null;
+    return send(res, 200, await render(record, type, relatedPractice, data.settings?.site || {}), 'public, s-maxage=60, stale-while-revalidate=300');
   } catch {
     if (builtIn[type].has(slug)) return send(res, 200, await templatePromise, 'no-store');
     return send(res, 503, '<!doctype html><html lang="en-KE"><title>Temporarily unavailable</title><meta name="robots" content="noindex, follow"><body><h1>Temporarily unavailable</h1><p>Please try again shortly.</p></body></html>');

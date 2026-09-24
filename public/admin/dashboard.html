@@ -16,21 +16,15 @@
         <img src="/assets/media/forland-header-logo.png" alt="Forland & Company Advocates" />
       </a>
       <nav class="nav" aria-label="Website manager navigation">
-        <button class="nav-link active" data-section="overview" type="button">Overview</button>
-        <button class="nav-link" data-section="pages" type="button">Pages</button>
-        <button class="nav-link" data-section="practice" type="button">Practice Areas</button>
-        <button class="nav-link" data-section="team" type="button">Team</button>
         <button class="nav-link" data-section="insights" type="button">Insights</button>
-        <button class="nav-link" data-section="media" type="button">Media</button>
-        <button class="nav-link" data-section="settings" type="button">Site Settings</button>
-        <button class="nav-link" data-section="seo" type="button">SEO</button>
-        <button class="nav-link" data-section="audit" type="button">Audit Log</button>
-        <button class="nav-link" data-section="security" type="button">Security</button>
+        <button class="nav-link" data-section="team" type="button">Team Members</button>
+        <button class="nav-link" data-section="practice" type="button">Practice Areas</button>
+        <button class="nav-link" data-section="contact" type="button">Contact Details</button>
       </nav>
       <div class="sidebar-footer">
         <p id="sidebar-email"></p>
-        <a href="/" target="_blank" rel="noopener">Open website</a>
-        <button id="logout" type="button">Sign out</button>
+        <a href="/" target="_blank" rel="noopener">View Website</a>
+        <button id="logout" type="button">Log Out</button>
       </div>
     </aside>
 
@@ -40,32 +34,32 @@
       <section class="section active" data-panel="overview">
         <header class="topbar">
           <div><p class="eyebrow">Website manager</p><h1>Control centre</h1><p class="subcopy">Manage public website content without editing code.</p></div>
-          <a class="primary-link" href="/" target="_blank" rel="noopener">Open live website</a>
+          <a class="primary-link" href="/" target="_blank" rel="noopener">View Website</a>
         </header>
-        <div class="stats" id="stats"></div>
-        <div class="grid two">
-          <article class="card"><p class="eyebrow">Quick actions</p><h2>Common tasks</h2><div class="quick-grid">
-            <button type="button" data-jump="practice">Edit practice areas</button><button type="button" data-jump="team">Manage team</button><button type="button" data-jump="insights">Publish insight</button><button type="button" data-jump="media">Upload image</button>
-          </div></article>
-          <article class="card"><p class="eyebrow">Administrator</p><h2>Signed in securely</h2><p class="account-email" id="account-email"></p><ul class="status-list"><li>HTTP-only secure session cookies</li><li>Server-side administrator restriction</li><li>Database writes audited</li><li>CMS tables blocked from direct browser access</li></ul></article>
+        <p class="account-email" id="account-email"></p>
+        <div class="quick-grid home-grid">
+          <button type="button" data-jump="insights"><strong>Insights</strong><span>Write, preview and publish legal articles</span></button>
+          <button type="button" data-jump="team"><strong>Team Members</strong><span>Add or update lawyer profiles</span></button>
+          <button type="button" data-jump="practice"><strong>Practice Areas</strong><span>Manage the firm’s legal services</span></button>
+          <button type="button" data-jump="contact"><strong>Contact Details</strong><span>Update phone, WhatsApp, email and office details</span></button>
         </div>
       </section>
 
-      <section class="section" data-panel="pages"><header class="section-head"><div><p class="eyebrow">Website pages</p><h1>Pages</h1><p>Edit page headings, introductions and search metadata.</p></div></header><div id="pages-list" class="content-list"></div></section>
-      <section class="section" data-panel="practice"><header class="section-head"><div><p class="eyebrow">Services</p><h1>Practice Areas</h1><p>Add, edit, publish, hide, reorder or remove practice areas.</p></div><button class="primary" data-add="practice_areas" type="button">Add practice area</button></header><div id="practice-list" class="content-list"></div></section>
-      <section class="section" data-panel="team"><header class="section-head"><div><p class="eyebrow">People</p><h1>Team</h1><p>Manage lawyer profiles, titles, bios, contact details and photos.</p></div><button class="primary" data-add="team_members" type="button">Add team member</button></header><div id="team-list" class="content-list"></div></section>
-      <section class="section" data-panel="insights"><header class="section-head"><div><p class="eyebrow">Publishing</p><h1>Insights</h1><p>Create drafts, publish articles and copy each published article’s unique website link to share with clients.</p></div><button class="primary" data-add="insights" type="button">New insight</button></header><div id="insights-list" class="content-list"></div></section>
+      <section class="section" data-panel="pages" hidden><div id="pages-list"></div></section>
+      <section class="section" data-panel="practice"><header class="section-head"><div><p class="eyebrow">Services</p><h1>Practice Areas</h1><p>Add, edit, publish, hide, reorder or remove practice areas.</p></div><button class="primary" data-add="practice_areas" type="button">Add New</button></header><div id="practice-list" class="content-list"></div></section>
+      <section class="section" data-panel="team"><header class="section-head"><div><p class="eyebrow">People</p><h1>Team Members</h1><p>Add, update, reorder, publish or hide team profiles.</p></div><button class="primary" data-add="team_members" type="button">Add New</button></header><div id="team-list" class="content-list"></div></section>
+      <section class="section" data-panel="insights"><header class="section-head"><div><p class="eyebrow">Publishing</p><h1>Insights</h1><p>Create drafts, preview and publish articles, then copy each article’s unique website link. Search metadata and internal links are handled automatically; search rankings still depend on Google and the quality and relevance of the content.</p></div><button class="primary" data-add="insights" type="button">Add New Article</button></header><div id="insights-list" class="content-list"></div></section>
 
-      <section class="section" data-panel="media">
+      <section class="section" data-panel="media" hidden>
         <header class="section-head"><div><p class="eyebrow">Assets</p><h1>Media library</h1><p>JPG, PNG and WebP only. Maximum 2.5 MB per image.</p></div></header>
         <article class="card upload-card"><form id="media-form"><div class="field"><label for="media-file">Image file</label><input id="media-file" type="file" accept="image/jpeg,image/png,image/webp" required /></div><div class="field"><label for="media-alt">Alternative text</label><input id="media-alt" type="text" maxlength="500" placeholder="Describe the image for accessibility" /></div><button class="primary" type="submit">Upload image</button></form></article>
         <div id="media-grid" class="media-grid"></div>
       </section>
 
-      <section class="section" data-panel="settings"><header class="section-head"><div><p class="eyebrow">Global website content</p><h1>Site Settings</h1><p>Update homepage, contact details and global calls to action.</p></div></header><article class="card"><form id="site-settings-form" class="form-grid"></form><div class="form-actions"><button class="primary" id="save-site-settings" type="button">Save site settings</button></div></article></section>
-      <section class="section" data-panel="seo"><header class="section-head"><div><p class="eyebrow">Search visibility</p><h1>SEO</h1><p>Manage default site title, description and social sharing image. Individual page/article SEO can be edited from its record.</p></div></header><article class="card"><form id="seo-settings-form" class="form-grid"></form><div class="form-actions"><button class="primary" id="save-seo-settings" type="button">Save SEO settings</button></div></article></section>
-      <section class="section" data-panel="audit"><header class="section-head"><div><p class="eyebrow">Accountability</p><h1>Audit Log</h1><p>Recent administrator changes to website content.</p></div><button class="secondary" id="refresh-audit" type="button">Refresh</button></header><div id="audit-list" class="content-list"></div></section>
-      <section class="section" data-panel="security"><header class="section-head"><div><p class="eyebrow">Administrator account</p><h1>Security</h1><p>Manage the administrator password and session.</p></div></header><div class="grid two"><article class="card"><h2>Account</h2><p class="account-email" id="security-email"></p><p class="muted">Only this authorised email is permitted by the server.</p></article><article class="card"><h2>Password & session</h2><div class="security-actions"><button class="primary" id="change-password" type="button">Change password</button><button class="danger-outline" id="security-logout" type="button">Sign out everywhere on this browser</button></div></article></div></section>
+      <section class="section" data-panel="contact"><header class="section-head"><div><p class="eyebrow">Public contact information</p><h1>Contact Details</h1><p>These details appear across the public website. Review them carefully before publishing.</p></div></header><article class="card"><form id="site-settings-form" class="form-grid"></form><p class="warning">Publishing will update the contact information visible to website visitors.</p><div class="form-actions"><button class="primary" id="save-site-settings" type="button">Publish Contact Changes</button></div></article></section>
+      <section class="section" data-panel="seo" hidden><form id="seo-settings-form"></form><button id="save-seo-settings" type="button">Save</button></section>
+      <section class="section" data-panel="audit" hidden><button id="refresh-audit" type="button">Refresh</button><div id="audit-list"></div></section>
+      <section class="section" data-panel="security" hidden><p id="security-email"></p><button id="change-password" type="button">Change password</button><button id="security-logout" type="button">Sign out</button></section>
 
       <footer class="footer">Forland & Company Advocates · Secure website administration</footer>
     </main>
@@ -77,10 +71,11 @@
     <form method="dialog" class="dialog-shell" id="editor-shell">
       <header><div><p class="eyebrow" id="editor-eyebrow">Editor</p><h2 id="editor-title">Edit record</h2></div><button class="icon-button" id="editor-close" aria-label="Close editor" type="button">×</button></header>
       <div id="editor-fields" class="editor-fields"></div>
-      <footer><button class="secondary" id="editor-cancel" type="button">Cancel</button><button class="primary" id="editor-save" type="button">Save changes</button></footer>
+      <footer><button class="danger-outline" id="editor-restore" type="button" hidden>Restore Previous Version</button><button class="secondary" id="editor-preview" type="button" hidden>Preview</button><button class="secondary" id="editor-cancel" type="button">Cancel</button><button class="secondary" id="editor-draft" type="button" hidden>Save Draft</button><button class="danger-outline" id="editor-unpublish" type="button" hidden>Unpublish</button><button class="primary" id="editor-save" type="button">Save Changes</button><button class="primary" id="editor-publish" type="button" hidden>Publish</button></footer>
     </form>
   </dialog>
   <datalist id="media-options"></datalist>
+  <dialog id="preview-dialog" class="editor-dialog preview-dialog"><div class="dialog-shell"><header><div><p class="eyebrow">Private preview</p><h2>Article Preview</h2></div><button class="icon-button" id="preview-close" aria-label="Close preview" type="button">×</button></header><article id="preview-content" class="preview-content"></article><footer><button class="primary" id="preview-done" type="button">Done</button></footer></div></dialog>
   <script type="module" src="/admin/dashboard.js"></script>
 </body>
 </html>

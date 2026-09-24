@@ -1,5 +1,5 @@
 import { body, json, method, requireSameOrigin, session } from '../../lib/admin-auth.js';
-import { audit, deleteResource, recentAudit, reorderResource, sanitizeResource, sanitizeSetting, saveSetting, snapshot, upsertResource } from '../../lib/cms-data.js';
+import { audit, captureRevision, deleteResource, recentAudit, reorderResource, restoreLatestRevision, sanitizeResource, sanitizeSetting, saveSetting, snapshot, upsertResource } from '../../lib/cms-data.js';
 
 function contentTypeOk(req) {
   return String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json');
@@ -38,9 +38,17 @@ export default async function handler(req, res) {
     if (action === 'save') {
       const value = sanitizeResource(resource, input.data || {}, current.user.id);
       if (resource !== 'pages' && (!value.title && !value.name)) return json(res, 400, { ok: false, message: 'A title or name is required.' });
+      if (value.id) await captureRevision(resource, value.id, current.user.id);
       const result = await upsertResource(resource, value);
       const record = result?.[0] || null;
       await audit(current.user, record?.created_at === record?.updated_at ? 'create' : 'update', resource, record?.id || record?.slug || value.slug, { slug: value.slug, title: value.title || value.name || '' });
+      return json(res, 200, { ok: true, record });
+    }
+
+    if (action === 'restore_revision') {
+      const result = await restoreLatestRevision(resource, input.id, current.user.id);
+      const record = result?.[0] || null;
+      await audit(current.user, 'restore', resource, input.id, { slug: record?.slug || '' });
       return json(res, 200, { ok: true, record });
     }
 
