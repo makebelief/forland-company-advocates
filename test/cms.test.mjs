@@ -170,9 +170,17 @@ test('public snapshots query only published records and allow-listed settings', 
   assert.equal(urls.some((url) => url.includes('cms_media')), false);
 });
 
-test('CMS runtime preserves the approved compiled list-page layouts', async () => {
+test('CMS runtime preserves the approved compiled list and detail-page layouts', async () => {
   const runtime = await readFile(new URL('../public/assets/js/cms-runtime.js', import.meta.url), 'utf8');
-  assert.match(runtime, /new Set\(\['\/practice-areas', '\/our-team', '\/insights'\]\)/);
+  for (const path of [
+    '/practice-areas',
+    '/practice-areas/litigation-dispute',
+    '/practice-areas/energy-emobility',
+    '/our-team',
+    '/insights',
+    '/insights/establishing-business',
+    '/insights/employment-compliance',
+  ]) assert.match(runtime, new RegExp(`'${path}'`));
   assert.doesNotMatch(runtime, /renderPracticeList|renderTeam|renderInsights/);
   assert.match(runtime, /preservedCompiledRoutes\.has\(path\)/);
 });

@@ -31,7 +31,7 @@ await Promise.all(required.map((file) => access(file)));
 const index = await readFile('index.html', 'utf8');
 if ((index.match(/cms-runtime\.js/g) || []).length !== 1) throw new Error('CMS runtime must load exactly once.');
 if ((index.match(/cms-runtime\.css/g) || []).length !== 1) throw new Error('CMS stylesheet must load exactly once.');
-if (!index.includes('/assets/js/cms-runtime.js?v=20260928-1')) throw new Error('CMS runtime cache-busting version is missing.');
+if (!index.includes('/assets/js/cms-runtime.js?v=20260928-2')) throw new Error('CMS runtime cache-busting version is missing.');
 if ((index.match(/practice-overview-images\.js/g) || []).length !== 1) throw new Error('Practice overview image enhancer must load exactly once.');
 if ((index.match(/practice-overview-images\.css/g) || []).length !== 1) throw new Error('Practice overview image stylesheet must load exactly once.');
 
@@ -89,7 +89,16 @@ const practiceOverviewImages = await readFile('public/assets/js/practice-overvie
 if (!publicApi.includes('publicOnly: true')) throw new Error('Public CMS API must request published content only.');
 if (!data.includes('cms_settings?key=in.(site,seo)')) throw new Error('Public settings must be allow-listed.');
 if (!data.includes('is_published=eq.true')) throw new Error('Public records must be filtered by publish state.');
-if (!cmsRuntime.includes("new Set(['/practice-areas', '/our-team', '/insights'])")) throw new Error('Approved compiled list-page layouts must be explicitly preserved.');
+for (const path of [
+  '/practice-areas', '/practice-areas/corporate-commercial', '/practice-areas/litigation-dispute', '/practice-areas/real-estate',
+  '/practice-areas/employment-labour', '/practice-areas/banking-finance', '/practice-areas/technology-data-ip',
+  '/practice-areas/immigration-mobility', '/practice-areas/estate-planning', '/practice-areas/construction-projects',
+  '/practice-areas/energy-emobility', '/our-team', '/insights', '/insights/establishing-business',
+  '/insights/commercial-agreement', '/insights/emobility-sector', '/insights/corporate-governance',
+  '/insights/property-due-diligence', '/insights/employment-compliance',
+]) {
+  if (!cmsRuntime.includes(`'${path}'`)) throw new Error('Approved compiled page layout is not explicitly preserved: ' + path);
+}
 for (const renderer of ['renderPracticeList', 'renderTeam', 'renderInsights']) {
   if (cmsRuntime.includes(renderer)) throw new Error('CMS runtime must not replace an approved compiled list-page layout: ' + renderer);
 }

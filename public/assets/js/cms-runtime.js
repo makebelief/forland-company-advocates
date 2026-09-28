@@ -2,7 +2,27 @@
   let cms = null;
   let scheduled = false;
   let managedMode = false;
-  const preservedCompiledRoutes = new Set(['/practice-areas', '/our-team', '/insights']);
+  const preservedCompiledRoutes = new Set([
+    '/practice-areas',
+    '/practice-areas/corporate-commercial',
+    '/practice-areas/litigation-dispute',
+    '/practice-areas/real-estate',
+    '/practice-areas/employment-labour',
+    '/practice-areas/banking-finance',
+    '/practice-areas/technology-data-ip',
+    '/practice-areas/immigration-mobility',
+    '/practice-areas/estate-planning',
+    '/practice-areas/construction-projects',
+    '/practice-areas/energy-emobility',
+    '/our-team',
+    '/insights',
+    '/insights/establishing-business',
+    '/insights/commercial-agreement',
+    '/insights/emobility-sector',
+    '/insights/corporate-governance',
+    '/insights/property-due-diligence',
+    '/insights/employment-compliance',
+  ]);
 
   const el = (tag, cls='', text='') => { const n=document.createElement(tag); if(cls)n.className=cls; if(text)n.textContent=text; return n; };
   const findPage = (slug) => cms?.pages?.find((x) => x.slug === slug && x.is_published !== false);
