@@ -29,6 +29,7 @@ await Promise.all(required.map((file) => access(file)));
 const index = await readFile('index.html', 'utf8');
 if ((index.match(/cms-runtime\.js/g) || []).length !== 1) throw new Error('CMS runtime must load exactly once.');
 if ((index.match(/cms-runtime\.css/g) || []).length !== 1) throw new Error('CMS stylesheet must load exactly once.');
+if (!index.includes('/assets/js/cms-runtime.js?v=20260928-1')) throw new Error('CMS runtime cache-busting version is missing.');
 
 const admin = await readFile('public/admin/index.html', 'utf8');
 const dashboard = await readFile('public/admin/dashboard.html', 'utf8');
@@ -95,6 +96,9 @@ if (!vercel.rewrites.some((rule) => rule.source === '/sitemap.xml' && rule.desti
 if (!vercel.rewrites.some((rule) => rule.source === '/practice-areas/:slug')) throw new Error('Dynamic practice routing is missing.');
 if (!vercel.rewrites.some((rule) => rule.source === '/insights/:slug')) throw new Error('Dynamic insight routing is missing.');
 if (vercel.rewrites.some((rule) => rule.source === '/(.*)')) throw new Error('A soft-404 catch-all must not be configured.');
+if (!vercel.headers.some((rule) => rule.source === '/assets/js/cms-runtime.js' && rule.headers?.some((header) => header.key === 'Cache-Control' && header.value.includes('must-revalidate')))) {
+  throw new Error('CMS runtime must revalidate so returning visitors cannot retain stale layout code.');
+}
 
 const migration = await readFile('supabase/migrations/20260923193000_cms_schema.sql', 'utf8');
 for (const table of ['admin_security', 'cms_pages', 'cms_practice_areas', 'cms_team_members', 'cms_insights', 'cms_media', 'cms_settings', 'cms_audit_log']) {
