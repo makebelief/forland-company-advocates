@@ -20,7 +20,9 @@ const required = [
   'public/admin/admin.js',
   'public/admin/dashboard.js',
   'public/assets/js/cms-runtime.js',
+  'public/assets/js/practice-overview-images.js',
   'public/assets/css/cms-runtime.css',
+  'public/assets/css/practice-overview-images.css',
   'supabase/migrations/20260923193000_cms_schema.sql',
   'supabase/migrations/20260924070000_editorial_workflow.sql',
 ];
@@ -30,6 +32,8 @@ const index = await readFile('index.html', 'utf8');
 if ((index.match(/cms-runtime\.js/g) || []).length !== 1) throw new Error('CMS runtime must load exactly once.');
 if ((index.match(/cms-runtime\.css/g) || []).length !== 1) throw new Error('CMS stylesheet must load exactly once.');
 if (!index.includes('/assets/js/cms-runtime.js?v=20260928-1')) throw new Error('CMS runtime cache-busting version is missing.');
+if ((index.match(/practice-overview-images\.js/g) || []).length !== 1) throw new Error('Practice overview image enhancer must load exactly once.');
+if ((index.match(/practice-overview-images\.css/g) || []).length !== 1) throw new Error('Practice overview image stylesheet must load exactly once.');
 
 const admin = await readFile('public/admin/index.html', 'utf8');
 const dashboard = await readFile('public/admin/dashboard.html', 'utf8');
@@ -81,12 +85,16 @@ for (const marker of ['detectedMime', 'MIME_EXTENSIONS', 'MAX_JSON_BYTES', 'cryp
 const publicApi = await readFile('api/cms/public.js', 'utf8');
 const data = await readFile('lib/cms-data.js', 'utf8');
 const cmsRuntime = await readFile('public/assets/js/cms-runtime.js', 'utf8');
+const practiceOverviewImages = await readFile('public/assets/js/practice-overview-images.js', 'utf8');
 if (!publicApi.includes('publicOnly: true')) throw new Error('Public CMS API must request published content only.');
 if (!data.includes('cms_settings?key=in.(site,seo)')) throw new Error('Public settings must be allow-listed.');
 if (!data.includes('is_published=eq.true')) throw new Error('Public records must be filtered by publish state.');
 if (!cmsRuntime.includes("new Set(['/practice-areas', '/our-team', '/insights'])")) throw new Error('Approved compiled list-page layouts must be explicitly preserved.');
 for (const renderer of ['renderPracticeList', 'renderTeam', 'renderInsights']) {
   if (cmsRuntime.includes(renderer)) throw new Error('CMS runtime must not replace an approved compiled list-page layout: ' + renderer);
+}
+for (const slug of ['corporate-commercial', 'litigation-dispute', 'real-estate', 'employment-labour', 'banking-finance', 'technology-data-ip', 'immigration-mobility', 'estate-planning', 'construction-projects', 'energy-emobility']) {
+  if (!practiceOverviewImages.includes(`'${slug}'`)) throw new Error('Practice overview image mapping is missing: ' + slug);
 }
 
 const sitemap = await readFile('public/sitemap.xml', 'utf8');
