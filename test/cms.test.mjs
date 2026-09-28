@@ -1,5 +1,6 @@
 import test, { afterEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import {
   ADMIN_EMAIL,
   authorizedEmail,
@@ -167,6 +168,13 @@ test('public snapshots query only published records and allow-listed settings', 
   assert.ok(urls.some((url) => url.includes('cms_settings?key=in.(site,seo)')));
   assert.equal(urls.filter((url) => url.includes('is_published=eq.true')).length, 4);
   assert.equal(urls.some((url) => url.includes('cms_media')), false);
+});
+
+test('CMS runtime preserves the approved compiled list-page layouts', async () => {
+  const runtime = await readFile(new URL('../public/assets/js/cms-runtime.js', import.meta.url), 'utf8');
+  assert.match(runtime, /new Set\(\['\/practice-areas', '\/our-team', '\/insights'\]\)/);
+  assert.doesNotMatch(runtime, /renderPracticeList|renderTeam|renderInsights/);
+  assert.match(runtime, /preservedCompiledRoutes\.has\(path\)/);
 });
 
 test('dynamic routes return 404 when a record is unpublished or missing', async () => {
