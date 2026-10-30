@@ -1,7 +1,70 @@
-/* A real portrait for the managing partner; the compiled Team page stays intact. */
-.team-managing-portrait{float:right;width:min(35%,320px);height:auto;aspect-ratio:4/4.1;object-fit:cover;object-position:center top;margin:0 0 1.2rem 2rem;border-radius:.65rem;box-shadow:0 18px 44px rgba(10,33,59,.14);background:#f5f6f7}
-.cms-team-list{padding:4rem 1.5rem 5rem;background:#f8f8f5}
-.cms-team-list .cms-wrap > h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(2.2rem,4vw,3.3rem);color:#10213b;margin:0 0 1.5rem}
-.cms-team-list .cms-person img{display:block;width:100%;aspect-ratio:4/4.2;object-fit:cover;object-position:center top}
-.cms-team-list .cms-person .cms-person-body p{overflow-wrap:anywhere}
-@media(max-width:700px){.team-managing-portrait{float:none;display:block;width:100%;max-width:380px;aspect-ratio:4/4.1;margin:0 auto 1.7rem}.cms-team-list{padding:3rem 1rem}}
+/* Our Team: large portrait and Managing Partner biography side by side. */
+/* Match only the existing approved Managing Partner article, not other cards. */
+main article:has(> .team-managing-portrait) {
+  width: 100%;
+  max-width: 1240px;
+}
+
+.team-managing-portrait {
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 2rem;
+  height: auto;
+  aspect-ratio: 4 / 4.5;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: .75rem;
+  box-shadow: 0 18px 44px rgba(10, 33, 59, .14);
+  background: #fff;
+}
+
+@media (min-width: 960px) {
+  main article:has(> .team-managing-portrait) {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    grid-template-rows: auto auto auto auto minmax(0, 1fr);
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+    align-items: start;
+    padding: clamp(2rem, 3.5vw, 4rem);
+  }
+
+  main article:has(> .team-managing-portrait) > :not(.team-managing-portrait) {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  main article:has(> .team-managing-portrait) > .team-managing-portrait {
+    grid-column: 1;
+    grid-row: 1 / span 5;
+    align-self: start;
+    height: min(95vh, 850px);
+    min-height: 640px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 959px) {
+  main article:has(> .team-managing-portrait) { max-width: 720px; }
+  main article:has(> .team-managing-portrait) > .team-managing-portrait {
+    height: clamp(350px, 85vw, 660px);
+  }
+}
+
+.cms-team-list { padding: 4rem 1.5rem 5rem; background: #f8f8f5; }
+.cms-team-list .cms-wrap > h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.2rem, 4vw, 3.3rem);
+  color: #10213b;
+  margin: 0 0 1.5rem;
+}
+.cms-team-list .cms-person img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 4.2;
+  object-fit: cover;
+  object-position: center top;
+}
+.cms-team-list .cms-person .cms-person-body p { overflow-wrap: anywhere; }
+@media (max-width: 700px) { .cms-team-list { padding: 3rem 1rem; } }
