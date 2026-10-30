@@ -1,5 +1,5 @@
 import { body, json, method, requireSameOrigin, session, supabaseServerConfig } from '../../lib/admin-auth.js';
-import { audit, deleteMediaRecord, saveMediaRecord } from '../../lib/cms-data.js';
+import { audit, deleteMediaRecord, rest, saveMediaRecord } from '../../lib/cms-data.js';
 
 const MIME_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 const MAX_BYTES = 2_500_000;
@@ -30,6 +30,14 @@ async function storage(path, options = {}) {
   });
 }
 
+function storageError(status) {
+  if (status === 404) return 'The CMS image storage bucket is unavailable. Apply the Supabase CMS migrations and confirm the cms-media bucket exists.';
+  if (status === 401 || status === 403) return 'The image storage permission was denied. Check the production Supabase server credentials and bucket policies.';
+  if (status === 413) return 'The storage server rejected the image size.';
+  if (status === 415) return 'The storage server rejected this image format.';
+  return 'Image storage is temporarily unavailable. Please try again.';
+}
+
 export default async function handler(req, res) {
   if (!method(req, res, ['POST', 'DELETE']) || !requireSameOrigin(req, res)) return;
   try {
@@ -55,19 +63,33 @@ export default async function handler(req, res) {
       }
       const unique = `${Date.now()}-${crypto.randomUUID()}.${MIME_EXT[mime]}`;
       const upload = await storage(`object/cms-media/${unique}`, { method: 'POST', headers: { 'Content-Type': mime, 'x-upsert': 'false', 'Cache-Control': '31536000' }, body: buffer });
-      if (!upload.ok) return json(res, 503, { ok: false, message: 'Image upload failed.' });
+      if (!upload.ok) {
+        console.warn('CMS image upload rejected; storage HTTP status:', upload.status);
+        return json(res, 503, { ok: false, message: storageError(upload.status) });
+      }
       const { url } = supabaseServerConfig();
       const publicUrl = `${url}/storage/v1/object/public/cms-media/${unique}`;
-      const rows = await saveMediaRecord({ storage_path: unique, public_url: publicUrl, file_name: fileName, mime_type: mime, size_bytes: buffer.length, alt_text: typeof input.altText === 'string' ? input.altText.trim().slice(0,500) : '', created_by: current.user.id });
-      const record = rows?.[0] || null;
+      let record;
+      try {
+        const rows = await saveMediaRecord({ storage_path: unique, public_url: publicUrl, file_name: fileName, mime_type: mime, size_bytes: buffer.length, alt_text: typeof input.altText === 'string' ? input.altText.trim().slice(0,500) : '', created_by: current.user.id });
+        record = rows?.[0] || null;
+        if (!record) throw new Error('Media metadata was not saved.');
+      } catch (error) {
+        await storage(`object/cms-media/${unique}`, { method: 'DELETE' }).catch(() => null);
+        console.error('CMS image database insert failed:', error?.message || 'Unknown error');
+        return json(res, 503, { ok: false, message: 'Image uploaded to storage but could not be saved to the media library. Check the Supabase CMS tables and retry.' });
+      }
       await audit(current.user, 'upload', 'media', record?.id || unique, { file_name: fileName, mime_type: mime, size_bytes: buffer.length });
       return json(res, 200, { ok: true, record });
     }
 
-    const rows = await deleteMediaRecord(input.id);
-    const record = rows?.[0];
+    if (typeof input.id !== 'string' || !/^[0-9a-f-]{36}$/i.test(input.id)) return json(res, 400, { ok: false, message: 'Invalid media ID.' });
+    const stored = await rest(`cms_media?select=id,storage_path,file_name&id=eq.${encodeURIComponent(input.id)}&limit=1`);
+    const record = stored?.[0];
     if (!record) return json(res, 404, { ok: false, message: 'Media item was not found.' });
-    await storage(`object/cms-media/${record.storage_path}`, { method: 'DELETE' }).catch(() => null);
+    const deletion = await storage(`object/cms-media/${record.storage_path}`, { method: 'DELETE' });
+    if (!deletion.ok && deletion.status !== 404) return json(res, 503, { ok: false, message: storageError(deletion.status) });
+    await deleteMediaRecord(record.id);
     await audit(current.user, 'delete', 'media', record.id, { file_name: record.file_name });
     return json(res, 200, { ok: true });
   } catch (error) {

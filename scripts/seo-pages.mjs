@@ -46,7 +46,7 @@ export const images = {
   governanceGuide: image('/assets/media/client-sept18/corporate-office.jpg', 739, 494, 'Corporate boardroom prepared for a governance meeting'),
   propertyGuide: image('/assets/media/client-sept18/real-estate-apartments.jpg', 739, 555, 'Apartment buildings representing Kenyan property investment'),
   employmentGuide: image('/assets/media/client-sept18/employment-agreement.jpg', 739, 493, 'Employment agreement and workplace documents'),
-  team: image('/assets/media/client-sept18/team-collaboration.jpg', 739, 492, 'Professional legal team collaborating around a work table'),
+  team: image('/assets/media/asbjorn-ngani-portrait.jpg', 1289, 1220, 'Portrait of Asbjorn Ng’ani, Managing Partner'),
   contact: image('/assets/media/client-update/legal-consultation.jpeg', 1280, 851, 'Legal professionals reviewing documents with a client'),
 };
 

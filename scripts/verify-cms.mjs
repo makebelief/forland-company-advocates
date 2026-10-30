@@ -10,6 +10,7 @@ const required = [
   'api/admin/complete-recovery.js',
   'api/admin/cms.js',
   'api/admin/media.js',
+  'api/contact.js',
   'api/cms/public.js',
   'api/cms/page.js',
   'api/sitemap.js',
@@ -22,6 +23,8 @@ const required = [
   'public/assets/js/cms-runtime.js',
   'public/assets/js/practice-overview-images.js',
   'public/assets/css/cms-runtime.css',
+  'public/assets/css/team-portraits.css',
+  'public/assets/media/asbjorn-ngani-portrait.webp',
   'public/assets/css/practice-overview-images.css',
   'supabase/migrations/20260923193000_cms_schema.sql',
   'supabase/migrations/20260924070000_editorial_workflow.sql',
@@ -31,7 +34,7 @@ await Promise.all(required.map((file) => access(file)));
 const index = await readFile('index.html', 'utf8');
 if ((index.match(/cms-runtime\.js/g) || []).length !== 1) throw new Error('CMS runtime must load exactly once.');
 if ((index.match(/cms-runtime\.css/g) || []).length !== 1) throw new Error('CMS stylesheet must load exactly once.');
-if (!index.includes('/assets/js/cms-runtime.js?v=20260928-2')) throw new Error('CMS runtime cache-busting version is missing.');
+if (!index.includes('/assets/js/cms-runtime.js?v=20261030-1')) throw new Error('CMS runtime cache-busting version is missing.');
 if ((index.match(/practice-overview-images\.js/g) || []).length !== 1) throw new Error('Practice overview image enhancer must load exactly once.');
 if ((index.match(/practice-overview-images\.css/g) || []).length !== 1) throw new Error('Practice overview image stylesheet must load exactly once.');
 
@@ -41,7 +44,7 @@ const dashboardScript = await readFile('public/admin/dashboard.js', 'utf8');
 for (const html of [admin, dashboard]) {
   if (!/name="robots" content="noindex, nofollow, noarchive"/.test(html)) throw new Error('Admin HTML must be noindex/nofollow.');
 }
-for (const label of ['Insights', 'Team Members', 'Practice Areas', 'Contact Details', 'View Website', 'Log Out']) {
+for (const label of ['Inquiries', 'Insights', 'Team Members', 'Practice Areas', 'Contact Details', 'View Website', 'Log Out']) {
   if (!dashboard.includes(label)) throw new Error('Dashboard navigation is missing: ' + label);
 }
 for (const marker of ["const SITE_ORIGIN = 'https://forlandcompanyadvocates.co.ke'", 'Copy article link', 'View article', "resource==='insights'"]) {
@@ -86,6 +89,7 @@ const publicApi = await readFile('api/cms/public.js', 'utf8');
 const data = await readFile('lib/cms-data.js', 'utf8');
 const cmsRuntime = await readFile('public/assets/js/cms-runtime.js', 'utf8');
 const practiceOverviewImages = await readFile('public/assets/js/practice-overview-images.js', 'utf8');
+if (!cmsRuntime.includes('syncTeamSection(main)')) throw new Error('Published Team Members must be mounted on the compiled team page.');
 if (!publicApi.includes('publicOnly: true')) throw new Error('Public CMS API must request published content only.');
 if (!data.includes('cms_settings?key=in.(site,seo)')) throw new Error('Public settings must be allow-listed.');
 if (!data.includes('is_published=eq.true')) throw new Error('Public records must be filtered by publish state.');

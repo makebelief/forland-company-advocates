@@ -18,6 +18,7 @@ import loginHandler from '../api/admin/login.js';
 import sessionHandler from '../api/admin/session.js';
 import cmsHandler from '../api/admin/cms.js';
 import mediaHandler from '../api/admin/media.js';
+import contactHandler from '../api/contact.js';
 import pageHandler from '../api/cms/page.js';
 
 process.env.SUPABASE_URL = 'https://project.supabase.co';
@@ -181,7 +182,9 @@ test('CMS runtime preserves the approved compiled list and detail-page layouts',
     '/insights/establishing-business',
     '/insights/employment-compliance',
   ]) assert.match(runtime, new RegExp(`'${path}'`));
-  assert.doesNotMatch(runtime, /renderPracticeList|renderTeam|renderInsights/);
+  assert.doesNotMatch(runtime, /renderPracticeList|renderTeam\(|renderInsights/);
+  assert.match(runtime, /syncTeamSection\(main\)/);
+  assert.match(runtime, /data-cms-team-members/);
   assert.match(runtime, /preservedCompiledRoutes\.has\(path\)/);
 });
 
@@ -235,4 +238,98 @@ test('media rejects extension and signature mismatches after authentication', as
   await mediaHandler(req, res);
   assert.equal(res.statusCode, 400);
   assert.match(res.json().message, /extension, MIME type and image signature/);
+});
+
+
+test('Vercel contact form rejects incomplete messages and missing consent', async () => {
+  const headers = { 'content-type': 'application/x-www-form-urlencoded' };
+  const res = response();
+  await contactHandler(request('POST', { headers, body: 'name=A&email=not-an-email&message=hi&privacy=on' }), res);
+  assert.equal(res.statusCode, 400);
+  const missingConsent = response();
+  await contactHandler(request('POST', { headers, body: 'name=Mary+Njeri&email=mary%40example.com&message=Please+call+me+about+legal+services' }), missingConsent);
+  assert.equal(missingConsent.statusCode, 400);
+});
+
+test('Vercel contact form saves a valid inquiry and only then reports success', async () => {
+  const saved = [];
+  global.fetch = async (url, options) => {
+    assert.match(String(url), /cms_inquiries$/);
+    saved.push(JSON.parse(options.body));
+    return new Response('', { status: 201 });
+  };
+  const res = response();
+  await contactHandler(request('POST', {
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: 'name=Mary+Njeri&email=mary%40example.com&message=Please+call+me+about+legal+services&privacy=on',
+  }), res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.json().ok, true);
+  assert.equal(saved.length, 1);
+  assert.equal(saved[0].full_name, 'Mary Njeri');
+  assert.equal(saved[0].privacy_ack, true);
+  const bundle = await readFile(new URL('../public/assets/js/site.min.js', import.meta.url), 'utf8');
+  assert.match(bundle, /var xs=`\/api\/contact`/);
+  assert.match(bundle, /e\.ok&&a\?\.ok===!0/);
+});
+
+test('contact form never reports success if Supabase refuses to save an inquiry', async () => {
+  global.fetch = async () => new Response('{"message":"not ready"}', { status: 404 });
+  const res = response();
+  await contactHandler(request('POST', {
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: 'name=Mary+Njeri&email=mary%40example.com&message=Please+call+me+about+legal+services&privacy=on',
+  }), res);
+  assert.equal(res.statusCode, 503);
+  assert.equal(res.json().ok, false);
+});
+
+test('partner portrait is bundled and team member profiles have a public runtime path', async () => {
+  const bundle = await readFile(new URL('../public/assets/js/site.min.js', import.meta.url), 'utf8');
+  assert.match(bundle, /asbjorn-ngani-portrait\.webp/);
+  const runtime = await readFile(new URL('../public/assets/js/cms-runtime.js', import.meta.url), 'utf8');
+  assert.match(runtime, /syncTeamSection\(main\)/);
+  assert.match(runtime, /cms\.teamMembers/);
+});
+
+test('a valid image is uploaded to Supabase and its public URL is saved in the media library', async () => {
+  const seen = [];
+  global.fetch = authenticatedFetch((url, options) => {
+    if (url.includes('/storage/v1/object/cms-media/')) {
+      seen.push(['storage', options.method]);
+      return new Response('{}', { status: 200 });
+    }
+    if (url.includes('/rest/v1/cms_media')) {
+      seen.push(['media', options.method]);
+      const saved = JSON.parse(options.body)[0];
+      return new Response(JSON.stringify([{ id: '858d82a7-2835-41a1-a9a8-8d8b932540a6', ...saved }]), { status: 201 });
+    }
+    if (url.includes('/rest/v1/cms_audit_log')) return new Response('[]', { status: 201 });
+    return null;
+  });
+  const png = Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a,0x11,0x22]).toString('base64');
+  const res = response();
+  await mediaHandler(request('POST', {
+    headers: { cookie: '__Host-forland_admin_at=test-access-token', 'content-type': 'application/json' },
+    body: { fileName: 'Portrait.png', mimeType: 'image/png', base64: png, altText: 'Professional portrait' },
+  }), res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.json().ok, true);
+  assert.match(res.json().record.public_url, /storage\/v1\/object\/public\/cms-media\/.*\.png$/);
+  assert.deepEqual(seen, [['storage','POST'],['media','POST']]);
+});
+
+test('media storage errors give actionable feedback instead of a misleading success', async () => {
+  global.fetch = authenticatedFetch((url) => url.includes('/storage/v1/object/cms-media/')
+    ? new Response('{"statusCode":404}', { status: 404 }) : null);
+  const res = response();
+  await mediaHandler(request('POST', {
+    headers: { cookie: '__Host-forland_admin_at=test-access-token', 'content-type': 'application/json' },
+    body: {
+      fileName: 'Portrait.png', mimeType: 'image/png',
+      base64: Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]).toString('base64'),
+    },
+  }), res);
+  assert.equal(res.statusCode, 503);
+  assert.match(res.json().message, /cms-media bucket/);
 });

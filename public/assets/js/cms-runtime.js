@@ -64,7 +64,53 @@
 
   function updateHardcodedCards(){(cms.practiceAreas||[]).forEach(item=>{document.querySelectorAll(`a[href="/practice-areas/${CSS.escape(item.slug)}"]`).forEach(a=>{const card=a.closest('article,div')||a;const heading=card.querySelector('h2,h3,h4');if(heading)heading.textContent=item.title;const p=card.querySelector('p');if(p&&item.summary)p.textContent=item.summary;if(!item.is_published)a.style.display='none';});});(cms.insights||[]).forEach(item=>{document.querySelectorAll(`a[href="/insights/${CSS.escape(item.slug)}"]`).forEach(a=>{const card=a.closest('article,div')||a;const heading=card.querySelector('h2,h3,h4');if(heading)heading.textContent=item.title;const ps=card.querySelectorAll('p');if(ps.length&&item.excerpt)ps[ps.length-1].textContent=item.excerpt;if(!item.is_published)a.style.display='none';});});}
 
-  function apply(){ if(!cms)return;const path=location.pathname.replace(/\/+$/,'')||'/';const main=document.querySelector('main');applyGlobalText();applyContactDetails();if(main?.dataset.cmsRoute===path)return;managedMode=false;if(preservedCompiledRoutes.has(path))return;if(path.startsWith('/practice-areas/')){if(!renderPracticeDetail(path.split('/').pop()))renderNotFound();return;}if(path.startsWith('/insights/')){if(!renderInsightDetail(path.split('/').pop()))renderNotFound();return;}if(path==='/'){if(!applyPageText('home'))renderNotFound();return;}if(path==='/about'){if(!applyPageText('about'))renderNotFound();return;}if(path==='/contact'){if(!applyPageText('contact'))renderNotFound();return;}updateHardcodedCards();}
+  // The original compiled /our-team page already has a detailed Managing Partner
+  // biography. Keep it, but show published CMS team members beneath it. Without
+  // this, an admin could upload and publish a photograph which never became visible.
+  function syncTeamSection(main) {
+    const members = Array.isArray(cms?.teamMembers) ? cms.teamMembers.filter(x => x.is_published !== false && x.name) : [];
+    const partnerHeading = [...main.querySelectorAll('h2')].find(h => h.textContent.trim() === 'Asbjorn Ng’ani');
+    const partnerArticle = partnerHeading?.closest('article');
+    const partnerSection = partnerArticle?.closest('section');
+    if (!partnerSection) return; // Wait for React to mount the approved Team layout.
+
+    const partner = members.find(x => x.name.trim().toLowerCase().replace(/[’']/g, '') === 'asbjorn ngani');
+    const portrait = partnerArticle.querySelector('.team-managing-portrait');
+    if (portrait && partner?.image_url && portrait.dataset.cmsImage !== partner.image_url) {
+      portrait.dataset.cmsImage = partner.image_url;
+      portrait.onerror = () => { portrait.onerror = null; portrait.src = '/assets/media/asbjorn-ngani-portrait.webp'; };
+      portrait.src = partner.image_url;
+    }
+
+    const others = members.filter(x => x !== partner);
+    const existing = main.querySelector('[data-cms-team-members]');
+    if (!others.length) { existing?.remove(); return; }
+    const signature = JSON.stringify(others.map(x => [x.id,x.name,x.role_title,x.qualifications,x.bio,x.image_url,x.sort_order]));
+    if (existing?.dataset.signature === signature) return;
+    const section = existing || el('section','cms-team-list');
+    section.dataset.cmsTeamMembers = 'true';
+    section.dataset.signature = signature;
+    section.textContent = '';
+    const wrap = el('div','cms-wrap');
+    wrap.append(el('h2','','Our Legal Team'));
+    const grid = el('div','cms-team-grid');
+    for (const item of others) {
+      const article = el('article','cms-person');
+      addImage(article,item.image_url,`Portrait of ${item.name}`);
+      const content = el('div','cms-person-body');
+      content.append(el('h3','',item.name));
+      if (item.role_title) content.append(el('p','cms-role',item.role_title));
+      if (item.qualifications) content.append(el('p','',item.qualifications));
+      if (item.bio) content.append(el('p','',item.bio));
+      article.append(content);
+      grid.append(article);
+    }
+    wrap.append(grid);
+    section.append(wrap);
+    if (!existing) partnerSection.after(section);
+  }
+
+  function apply(){ if(!cms)return;const path=location.pathname.replace(/\/+$/,'')||'/';const main=document.querySelector('main');applyGlobalText();applyContactDetails();if(main?.dataset.cmsRoute===path)return;managedMode=false;if(path==='/our-team'){if(main)syncTeamSection(main);return;}if(preservedCompiledRoutes.has(path))return;if(path.startsWith('/practice-areas/')){if(!renderPracticeDetail(path.split('/').pop()))renderNotFound();return;}if(path.startsWith('/insights/')){if(!renderInsightDetail(path.split('/').pop()))renderNotFound();return;}if(path==='/'){if(!applyPageText('home'))renderNotFound();return;}if(path==='/about'){if(!applyPageText('about'))renderNotFound();return;}if(path==='/contact'){if(!applyPageText('contact'))renderNotFound();return;}updateHardcodedCards();}
 
   function schedule(){if(scheduled)return;scheduled=true;setTimeout(()=>{scheduled=false;apply();},120);}
   function patchHistory(){for(const name of ['pushState','replaceState']){const original=history[name];history[name]=function(...args){const r=original.apply(this,args);schedule();return r;};}addEventListener('popstate',schedule);}

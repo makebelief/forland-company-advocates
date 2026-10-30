@@ -72,6 +72,8 @@ const requiredMarkers = [
   '/assets/media/nairobi-drone-film-mobile-loop.mp4',
   '/assets/media/nairobi-drone-film-loop.mp4',
   '/assets/media/hero-poster-nairobi.webp',
+  '/api/contact',
+  '/assets/media/asbjorn-ngani-portrait.webp',
 ];
 const forbiddenProductionMarkers = [
   '[PHONE NUMBER]',
@@ -79,7 +81,6 @@ const forbiddenProductionMarkers = [
   '[OFFICE ADDRESS]',
   '[OFFICE HOURS]',
   'This page has not been generated',
-  '/api/contact',
 ];
 
 for (const marker of requiredMarkers) {
@@ -88,8 +89,8 @@ for (const marker of requiredMarkers) {
 if ((bundle.split('o.append(`form-name`,`contact`),').length - 1) !== 1) {
   throw new Error('The contact request must include exactly one form-name field.');
 }
-if ((bundle.match(/loading:`lazy`/g) || []).length !== 13) {
-  throw new Error('All 13 content images should use native lazy loading.');
+if ((bundle.match(/loading:`lazy`/g) || []).length !== 14) {
+  throw new Error('All 14 content images should use native lazy loading.');
 }
 const wording = await readFile('public/assets/js/wording-updates.js', 'utf8');
 if (!wording.includes('"Practical Legal Solutions for Business, Investment and Growth"')) {

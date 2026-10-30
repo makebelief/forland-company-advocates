@@ -15,7 +15,7 @@ function truncate(value,n=130){ const s=String(value||''); return s.length>n?`${
 function element(tag, attrs={}, text=''){ const el=document.createElement(tag); for(const [k,v] of Object.entries(attrs)){ if(k==='class')el.className=v; else if(k==='type')el.type=v; else el.setAttribute(k,v); } if(text)el.textContent=text; return el; }
 async function copyPublicLink(path){const url=new URL(path,SITE_ORIGIN).href;try{if(!navigator.clipboard?.writeText)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(url);notice('Article link copied. It is ready to share.');}catch{window.prompt('Copy this article link:',url);}}
 
-function switchSection(name){ document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.dataset.panel===name)); document.querySelectorAll('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.section===name)); if(name==='audit') loadAudit(); }
+function switchSection(name){ document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.dataset.panel===name)); document.querySelectorAll('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.section===name)); if(name==='audit') loadAudit(); if(name==='inquiries') loadInquiries(); }
 
 document.querySelectorAll('.nav-link[data-section]').forEach(btn=>btn.addEventListener('click',()=>switchSection(btn.dataset.section)));
 document.querySelectorAll('[data-jump]').forEach(btn=>btn.addEventListener('click',()=>switchSection(btn.dataset.jump)));
@@ -34,8 +34,72 @@ const inlineMarkup=(value)=>escapeMarkup(value).replace(/\[([^\]]+)\]\((https:\/
 function formattedMarkup(value){const out=[];let list='';const close=()=>{if(list)out.push(`</${list}>`);list='';};for(const raw of String(value||'').split(/\r?\n/)){const line=raw.trim();if(!line){close();continue;}const heading=line.match(/^(#{2,3})\s+(.+)$/);if(heading){close();const level=heading[1].length;out.push(`<h${level}>${inlineMarkup(heading[2])}</h${level}>`);continue;}const bullet=line.match(/^[-*]\s+(.+)$/),numbered=line.match(/^\d+[.)]\s+(.+)$/);if(bullet||numbered){const next=bullet?'ul':'ol';if(list!==next){close();list=next;out.push(`<${list}>`);}out.push(`<li>${inlineMarkup((bullet||numbered)[1])}</li>`);continue;}close();out.push(`<p>${inlineMarkup(line)}</p>`);}close();return out.join('');}
 function formattingToolbar(input){const bar=element('div',{class:'format-toolbar','aria-label':'Article formatting'});for(const [label,action] of [['Heading','heading'],['Bold','bold'],['Italic','italic'],['Bullets','bullets'],['Numbered list','numbered'],['Link','link']]){const button=element('button',{type:'button'},label);button.addEventListener('click',()=>applyFormatting(input,action));bar.append(button);}return bar;}
 function applyFormatting(input,action){const start=input.selectionStart,end=input.selectionEnd,selected=input.value.slice(start,end)||'Text';let replacement=selected;if(action==='heading')replacement=`## ${selected}`;if(action==='bold')replacement=`**${selected}**`;if(action==='italic')replacement=`_${selected}_`;if(action==='bullets')replacement=selected.split('\n').map(x=>`- ${x}`).join('\n');if(action==='numbered')replacement=selected.split('\n').map((x,i)=>`${i+1}. ${x}`).join('\n');if(action==='link'){const url=prompt('Enter the full https:// link or a website path beginning with /:','https://');if(!url)return;replacement=`[${selected}](${url})`;}input.setRangeText(replacement,start,end,'end');input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();}
-async function uploadForField(input){const picker=element('input',{type:'file',accept:'image/jpeg,image/png,image/webp'});picker.addEventListener('change',()=>uploadSelectedImage(picker.files[0],input),{once:true});picker.click();}
-async function uploadSelectedImage(file,input){if(!file)return;if(file.size>2500000)return notice('Image is larger than 2.5 MB.','error');notice('Uploading image…');const reader=new FileReader();reader.onload=async()=>{try{const base64=String(reader.result).split(',')[1]||'';const alt=$('field-featured_image_alt')?.value||$('field-title')?.value||$('field-name')?.value||'';const {response,data}=await api('media',{method:'POST',body:JSON.stringify({fileName:file.name,mimeType:file.type,altText:alt,base64})});if(!response.ok)throw new Error(data.message||'Upload failed.');input.value=data.record.public_url;input.dispatchEvent(new Event('input',{bubbles:true}));notice('Image uploaded and selected.');await loadData();}catch(error){notice(error.message,'error');}};reader.readAsDataURL(file);}
+const UPLOAD_LIMIT = 2_500_000;
+const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+function imageDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Unable to read the selected image. Please choose the file again.'));
+    reader.onload = () => resolve(String(reader.result || '').split(',')[1] || '');
+    reader.readAsDataURL(file);
+  });
+}
+async function prepareImage(file) {
+  if (!IMAGE_TYPES.has(file.type)) throw new Error('Choose a JPG, PNG or WebP image.');
+  if (file.size <= UPLOAD_LIMIT) return file;
+  // Shrink large camera photos in-browser instead of rejecting them outright.
+  const objectUrl = URL.createObjectURL(file);
+  let image;
+  try {
+    image = new Image();
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = () => reject(new Error('The selected image could not be opened.'));
+      image.src = objectUrl;
+    });
+    const scale = Math.min(1, 1800 / Math.max(image.naturalWidth, image.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('This browser cannot resize images.');
+    context.fillStyle = '#fff'; // Preserve transparency against white for converted JPGs.
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    for (const quality of [0.85, 0.72, 0.57]) {
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+      if (blob && blob.size > 0 && blob.size <= UPLOAD_LIMIT) {
+        return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+      }
+    }
+    throw new Error('This picture is still above 2.5 MB. Please resize it and upload again.');
+  } finally { URL.revokeObjectURL(objectUrl); }
+}
+async function sendImage(file, altText='') {
+  const ready = await prepareImage(file);
+  const base64 = await imageDataUrl(ready);
+  const {response,data} = await api('media', {method:'POST',body:JSON.stringify({fileName:ready.name,mimeType:ready.type,altText,base64})});
+  if (!response.ok || !data.record?.public_url) throw new Error(data.message || `Upload failed (HTTP ${response.status}).`);
+  return data.record;
+}
+async function uploadForField(input) {
+  const picker=element('input',{type:'file',accept:'image/jpeg,image/png,image/webp'});
+  picker.addEventListener('change',()=>uploadSelectedImage(picker.files[0],input),{once:true});
+  picker.click();
+}
+async function uploadSelectedImage(file,input) {
+  if(!file)return;
+  notice('Uploading image… Large photos are reduced automatically.');
+  try {
+    const alt=$('field-featured_image_alt')?.value||$('field-title')?.value||$('field-name')?.value||'';
+    const record=await sendImage(file,alt);
+    input.value=record.public_url;
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+    state.editorDirty=true;
+    notice('Photo uploaded and selected. Click Save Changes to publish it on the website.');
+    await loadData();
+  } catch (error) { notice(error.message,'error'); }
+}
 
 function openEditor(resource, record=null){ state.currentResource=resource; state.editing=record?structuredClone(record):defaultRecord(resource); const cfg=configs[resource]; $('editor-eyebrow').textContent=record?'Edit content':'Create content'; $('editor-title').textContent=`${record?'Edit':'Add'} ${cfg.title}`; const box=$('editor-fields'); box.textContent='';
   cfg.fields.forEach(([key,label,type,path])=>{ const wrap=element('div',{class:`field ${['summary','body','services','bio','excerpt','meta_description','intro'].includes(key)?'full':''}`}); const lab=element('label',{},label); lab.htmlFor=`field-${key}`; wrap.append(lab); let input;
@@ -85,8 +149,47 @@ async function saveSettings(key,formId,fields){const value=key==='site'?{...(sta
 $('save-site-settings').addEventListener('click',()=>{if(confirm('Publish these contact details across the public website?'))saveSettings('site','site-settings-form',siteFields);});$('save-seo-settings').addEventListener('click',()=>saveSettings('seo','seo-settings-form',seoFields));
 
 function renderMedia(){const options=$('media-options');options.textContent='';state.data.media.forEach(item=>options.append(element('option',{value:item.public_url},item.file_name)));const box=$('media-grid');box.textContent='';if(!state.data.media.length){box.append(element('p',{class:'muted'},'No uploaded media yet.'));return;}state.data.media.forEach(item=>{const card=element('article',{class:'media-card'});const img=element('img',{src:item.public_url,alt:item.alt_text||''});const info=element('div',{class:'media-info'});info.append(element('strong',{},item.file_name),element('p',{},item.alt_text||`${Math.round(item.size_bytes/1024)} KB`));const acts=element('div',{class:'media-actions'});const copy=element('button',{type:'button'},'Copy URL');copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(item.public_url);notice('Image URL copied.');}catch{notice('Copy failed. Select and copy the URL from an image field instead.','error');}});const del=element('button',{type:'button'},'Delete');del.addEventListener('click',()=>deleteMedia(item));acts.append(copy,del);info.append(acts);card.append(img,info);box.append(card);});}
-$('media-form').addEventListener('submit',async(e)=>{e.preventDefault();const file=$('media-file').files[0];if(!file)return;if(file.size>2500000)return notice('Image is larger than 2.5 MB.','error');notice('Uploading image…');const reader=new FileReader();reader.onload=async()=>{const base64=String(reader.result).split(',')[1]||'';const submit=e.currentTarget.querySelector('button[type=submit]');submit.disabled=true;try{const {response,data}=await api('media',{method:'POST',body:JSON.stringify({fileName:file.name,mimeType:file.type,altText:$('media-alt').value.trim(),base64})});if(!response.ok)throw new Error(data.message||'Upload failed.');e.currentTarget.reset();notice('Image uploaded.');await loadData();}catch(err){notice(err.message,'error');}finally{submit.disabled=false;}};reader.readAsDataURL(file);});
+$('media-form').addEventListener('submit',async(event)=>{
+  event.preventDefault();
+  const form=event.currentTarget;
+  const file=$('media-file').files[0];
+  if(!file)return;
+  const submit=form.querySelector('button[type=submit]');
+  submit.disabled=true;
+  notice('Uploading image… Large photos are reduced automatically.');
+  try {
+    await sendImage(file,$('media-alt').value.trim());
+    form.reset();
+    notice('Image uploaded. Select its URL in a Team Member, then Save Changes to publish it.');
+    await loadData();
+  } catch(err) { notice(err.message,'error'); }
+  finally { submit.disabled=false; }
+});
 async function deleteMedia(item){if(!confirm(`Delete image “${item.file_name}”?`))return;const {response,data}=await api('media',{method:'DELETE',body:JSON.stringify({id:item.id})});if(!response.ok)return notice(data.message||'Unable to delete image.','error');notice('Image deleted.');await loadData();}
+
+async function loadInquiries(){
+  const box=$('inquiries-list');
+  box.textContent='';
+  box.append(element('p',{class:'muted'},'Loading website inquiries…'));
+  try {
+    const {response,data}=await api('cms?view=inquiries',{method:'GET'});
+    if(!response.ok)throw new Error(data.message||'Unable to load inquiries.');
+    box.textContent='';
+    if(!data.inquiries?.length){box.append(element('p',{class:'muted'},'No inquiries have been received yet.'));return;}
+    for(const item of data.inquiries){
+      const card=element('article',{class:'content-row inquiry-row'});
+      const details=element('div',{class:'row-main'});
+      details.append(element('strong',{},item.full_name+' · '+escDate(item.created_at)));
+      details.append(element('p',{},[item.company,item.practice_area,item.status].filter(Boolean).join(' · ')));
+      const email=element('a',{href:`mailto:${encodeURIComponent(item.email)}`},item.email);
+      details.append(email);
+      if(item.phone)details.append(element('p',{},item.phone));
+      details.append(element('p',{},item.message));
+      card.append(details);box.append(card);
+    }
+  }catch(error){box.textContent='';box.append(element('p',{class:'muted'},error.message));}
+}
+$('refresh-inquiries').addEventListener('click',loadInquiries);
 
 async function loadAudit(){const box=$('audit-list');box.textContent='';box.append(element('p',{class:'muted'},'Loading audit history…'));const {response,data}=await api('cms?view=audit',{method:'GET'});box.textContent='';if(!response.ok)return box.append(element('p',{class:'muted'},'Audit history is unavailable.'));state.audit=data.audit||[];state.audit.forEach(item=>{const r=element('article',{class:'content-row'});const main=element('div',{class:'row-main'});const tl=element('div',{class:'row-title'});tl.append(element('strong',{},`${item.action} · ${item.resource}`));main.append(tl,element('p',{},`${item.resource_id||'—'} · ${item.user_email||'administrator'}`),element('span',{class:'audit-meta'},escDate(item.created_at)));r.append(main);box.append(r);});if(!state.audit.length)box.append(element('p',{class:'muted'},'No CMS changes recorded yet.'));}
 $('refresh-audit').addEventListener('click',loadAudit);

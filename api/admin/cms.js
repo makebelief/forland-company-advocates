@@ -1,5 +1,5 @@
 import { body, json, method, requireSameOrigin, session } from '../../lib/admin-auth.js';
-import { audit, captureRevision, deleteResource, recentAudit, reorderResource, restoreLatestRevision, sanitizeResource, sanitizeSetting, saveSetting, snapshot, upsertResource } from '../../lib/cms-data.js';
+import { audit, captureRevision, deleteResource, recentAudit, reorderResource, restoreLatestRevision, sanitizeResource, sanitizeSetting, saveSetting, snapshot, rest, upsertResource } from '../../lib/cms-data.js';
 
 function contentTypeOk(req) {
   return String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json');
@@ -13,6 +13,9 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       const url = new URL(req.url, 'https://admin.local');
+      if (url.searchParams.get('view') === 'inquiries') {
+        return json(res, 200, { ok: true, inquiries: await rest('cms_inquiries?select=id,full_name,company,email,phone,practice_area,message,status,created_at&order=created_at.desc&limit=100') });
+      }
       if (url.searchParams.get('view') === 'audit') {
         return json(res, 200, { ok: true, audit: await recentAudit(50) });
       }

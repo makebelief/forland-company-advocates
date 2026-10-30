@@ -73,7 +73,12 @@ Do not create another repository, Vercel project or Supabase project.
 
 ## Contact and analytics
 
-The existing public inquiry flow, consent-aware GA4 installation and privacy controls are preserved. GA4 remains denied until the visitor grants analytics consent.
+The Vercel contact form now submits to `/api/contact` and saves validated inquiries in the private `cms_inquiries` Supabase table. It **only** displays success after a confirmed database write. The admin dashboard has a private **Inquiries** section. Contact inquiries are not automatically emailed; the administrator must review them in the dashboard. The existing consent-aware GA4 installation and privacy controls are preserved. GA4 remains denied until the visitor grants analytics consent.
+
+The Managing Partner portrait supplied for the repair is included as a public local asset on `/our-team`. Team members uploaded through the admin CMS appear in a separate grid once the individual record is saved and marked **Visible on website**. Uploading to Media Library by itself does not publish a member profile.
+
+**Deployment domain check:** This code, SEO URLs, and administrator recovery origin are configured for `https://forlandcompanyadvocates.co.ke` (not `www.folandadvocates.co.ke`). Verify the actual production domain and any redirects in the existing Vercel dashboard before going live. See `DEPLOY-REPAIR.md`.
+
 
 ## Source note
 

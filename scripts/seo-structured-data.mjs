@@ -197,6 +197,7 @@ export const buildStructuredData = (path, page = pages[path]) => {
       '@id': `${site.origin}/our-team#asbjorn-ngani`,
       name: 'Asbjorn Ng’ani',
       jobTitle: 'Managing Partner and Advocate of the High Court of Kenya',
+      image: `${site.origin}/assets/media/asbjorn-ngani-portrait.jpg`,
       url,
       worksFor: { '@id': organizationId },
       knowsAbout: page.topics,
